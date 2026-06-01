@@ -1,0 +1,76 @@
+{
+  "briefType": "daily_interview_intelligence",
+  "fixtureNotice": "This fixture demonstrates the daily intelligence schema. It is not live hiring intelligence. Real runs must refresh all sourceUrls.",
+  "generatedAt": "2026-06-01T09:00:00Z",
+  "target": {
+    "roleFamily": "backend",
+    "city": "Shanghai",
+    "companyScales": ["国央企", "大厂", "中厂", "小厂"]
+  },
+  "agentRuns": [
+    {
+      "name": "state-owned-scout",
+      "companyScale": "国央企",
+      "queryIds": ["state-owned-gd"],
+      "status": "completed"
+    },
+    {
+      "name": "big-tech-scout",
+      "companyScale": "大厂",
+      "queryIds": ["big-tech-manager"],
+      "status": "completed"
+    },
+    {
+      "name": "mid-market-scout",
+      "companyScale": "中厂",
+      "queryIds": ["mid-market-process"],
+      "status": "completed"
+    },
+    {
+      "name": "small-team-scout",
+      "companyScale": "小厂",
+      "queryIds": ["small-team-founder"],
+      "status": "completed"
+    }
+  ],
+  "summary": {
+    "topSignals": [
+      "大厂后端经理面继续关注项目 owner 感、事故复盘和跨团队协作。",
+      "中厂技术面示例信号集中在缓存、SQL 索引和异步任务边界。",
+      "国央企 GD 示例信号偏稳定性、公共服务场景和结构化表达。"
+    ],
+    "interviewProcessSignals": ["group_discussion", "manager_round", "technical_interview"],
+    "unknowns": [
+      "Fixture data cannot prove current live hiring process.",
+      "Social/forum signals need corroboration before becoming preparation claims."
+    ]
+  },
+  "findings": [
+    {
+      "companyName": "China Grid Digital",
+      "companyScale": "国央企",
+      "signalType": "group_discussion",
+      "title": "国央企数字化岗 GD 讨论开始更多围绕稳定性与公共服务场景",
+      "sourceUrl": "https://example.com/intelligence/state-owned-gd-2026",
+      "sourceType": "forum",
+      "relevanceScore": 0.82,
+      "tags": ["gd", "group_discussion", "stability_signal"]
+    },
+    {
+      "companyName": "ByteWave Cloud",
+      "companyScale": "大厂",
+      "signalType": "manager_round",
+      "title": "大厂后端经理面更关注项目 owner 感和跨团队协作",
+      "sourceUrl": "https://example.com/intelligence/big-tech-manager-round-2026",
+      "sourceType": "social",
+      "relevanceScore": 0.88,
+      "tags": ["manager_round", "mentor_match", "project_review"]
+    }
+  ],
+  "sourceUrls": [
+    "https://example.com/intelligence/state-owned-gd-2026",
+    "https://example.com/intelligence/big-tech-manager-round-2026",
+    "https://example.com/intelligence/mid-market-technical-2026",
+    "https://example.com/intelligence/small-team-founder-2026"
+  ]
+}

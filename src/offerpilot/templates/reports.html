@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Report · OfferPilot{% endblock %}
+{% block content %}
+{% if report %}
+<section class="page-head">
+  <h1>Source-backed report</h1>
+  <p>{{ report.query }}</p>
+</section>
+<section class="grid">
+  <div class="panel wide">
+    <h2>Summary</h2>
+    <pre class="markdown">{{ report.summary_md }}</pre>
+  </div>
+  <div class="panel">
+    <h2>Source URLs</h2>
+    {% for url in report.source_urls_json %}
+      <a class="source" href="{{ url }}">{{ url }}</a>
+    {% endfor %}
+  </div>
+  <div class="panel wide">
+    <h2>Evidence Quality</h2>
+    {% for item in evidence_items %}
+      <div class="evidence-card">
+        <div>
+          <strong>{{ item.title or item.url }}</strong>
+          <span>
+            {{ item.source_type }} · {{ item.publisher or "unknown publisher" }}
+            · quality {{ (item.raw_json or {}).get("quality_label", "unknown") }}
+          </span>
+        </div>
+        <div class="score-row">
+          <span>overall {{ "%.2f"|format((item.raw_json or {}).get("overall_score", 0)) }}</span>
+          <span>rel {{ "%.2f"|format(item.relevance_score or 0) }}</span>
+          <span>fresh {{ "%.2f"|format(item.freshness_score or 0) }}</span>
+          <span>trust {{ "%.2f"|format(item.credibility_score or 0) }}</span>
+        </div>
+        <ul class="score-reasons">
+          {% for reason in (item.raw_json or {}).get("score_reasons", []) %}
+            <li>{{ reason }}</li>
+          {% endfor %}
+        </ul>
+        <a class="source" href="{{ item.url }}">{{ item.url }}</a>
+      </div>
+    {% else %}
+      <p class="empty">No evidence items stored.</p>
+    {% endfor %}
+  </div>
+</section>
+{% else %}
+<p class="empty">Report not found.</p>
+{% endif %}
+{% endblock %}

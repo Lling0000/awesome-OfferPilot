@@ -1,0 +1,526 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f7f9;
+  --ink: #111827;
+  --muted: #5b6472;
+  --line: #d9dee7;
+  --panel: #ffffff;
+  --accent: #0f766e;
+  --accent-2: #7c3aed;
+  --danger: #b91c1c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+}
+
+.topbar {
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 0 28px;
+}
+
+.brand {
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 16px;
+}
+
+nav a {
+  color: var(--muted);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.shell {
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: 32px 20px 56px;
+}
+
+.hero,
+.page-head {
+  align-items: flex-end;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.hero h1,
+.page-head h1 {
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.03;
+  margin: 0 0 14px;
+  max-width: 820px;
+}
+
+.hero p,
+.page-head p {
+  color: var(--muted);
+  margin: 0;
+  max-width: 720px;
+}
+
+.eyebrow {
+  color: var(--accent) !important;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin-bottom: 10px !important;
+  text-transform: uppercase;
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.intake-form {
+  margin-top: 22px;
+  max-width: 680px;
+}
+
+.intake-form label {
+  color: var(--muted);
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.intake-form div {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.intake-form input {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  min-height: 44px;
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.intake-form button {
+  background: var(--accent);
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+.artifact-form {
+  display: grid;
+  gap: 14px;
+}
+
+.artifact-form.compact {
+  min-width: min(320px, 100%);
+ }
+
+.artifact-form button {
+  align-self: start;
+  background: var(--accent);
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 0 16px;
+}
+
+.form-row {
+  display: grid;
+  gap: 7px;
+}
+
+.form-row label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  min-width: 0;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.inline-form {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  margin-bottom: 14px;
+}
+
+.inline-form input {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  min-height: 42px;
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.inline-form select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  min-height: 42px;
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.inline-form button {
+  background: var(--accent);
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 0 14px;
+}
+
+.button {
+  background: var(--accent);
+  border-radius: 8px;
+  color: #ffffff;
+  display: inline-flex;
+  font-weight: 760;
+  padding: 10px 14px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.button.secondary {
+  background: var(--accent-2);
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.panel.wide {
+  grid-column: 1 / -1;
+}
+
+.panel h2 {
+  font-size: 18px;
+  margin: 0 0 14px;
+}
+
+.list-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: block;
+  margin: 10px 0;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.list-item strong,
+.list-item span {
+  display: block;
+}
+
+.list-item span,
+.empty {
+  color: var(--muted);
+}
+
+.source {
+  border-bottom: 1px solid var(--line);
+  display: block;
+  overflow-wrap: anywhere;
+  padding: 8px 0;
+}
+
+.evidence-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 12px 0;
+  padding: 14px;
+}
+
+.interview-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 12px 0;
+  padding: 14px;
+}
+
+.interview-card p {
+  color: var(--muted);
+  margin: 10px 0 14px;
+}
+
+.interview-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.interview-head span {
+  color: var(--muted);
+}
+
+.mini-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mini-grid h3 {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.mini-grid ul {
+  color: var(--muted);
+  margin: 0;
+  padding-left: 20px;
+}
+
+.intel-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.intel-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: inherit;
+  display: block;
+  padding: 14px;
+  text-decoration: none;
+}
+
+.intel-card p {
+  color: var(--muted);
+  margin: 8px 0;
+}
+
+.intel-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.intel-meta span {
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 8px;
+}
+
+.scale-badge {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.signal-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.source-badge {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.quality-badge {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.warning-badge {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.metric-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.metric-grid div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.metric-grid strong,
+.metric-grid span {
+  display: block;
+}
+
+.metric-grid span {
+  color: var(--muted);
+}
+
+.coverage-row {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  margin: 10px 0;
+  padding: 12px;
+}
+
+.coverage-row span {
+  color: var(--muted);
+}
+
+.coverage-row code {
+  background: #f8fafc;
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+  padding: 8px;
+}
+
+.evidence-card strong,
+.evidence-card span {
+  display: block;
+}
+
+.evidence-card span {
+  color: var(--muted);
+}
+
+.score-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.score-row span {
+  background: #eef2ff;
+  border-radius: 999px;
+  color: #3730a3;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 9px;
+}
+
+.score-reasons {
+  color: var(--muted);
+  margin: 10px 0 4px;
+  padding-left: 20px;
+}
+
+.score-reasons li {
+  margin: 3px 0;
+}
+
+.markdown {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: auto;
+  padding: 14px;
+  white-space: pre-wrap;
+}
+
+.check {
+  border-left: 4px solid var(--line);
+  padding: 10px 12px;
+}
+
+.check.ok {
+  border-left-color: var(--accent);
+}
+
+.check.fail {
+  border-left-color: var(--danger);
+}
+
+.check span {
+  color: var(--muted);
+  display: block;
+}
+
+@media (max-width: 760px) {
+  .hero,
+  .page-head,
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mini-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-form,
+  .intel-grid,
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .intake-form div {
+    grid-template-columns: 1fr;
+  }
+}

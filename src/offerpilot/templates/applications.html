@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Applications · OfferPilot{% endblock %}
+{% block content %}
+<section class="page-head">
+  <h1>Applications</h1>
+  <p>Every opportunity keeps its resume version, link, reminders, interviews, and evidence reports together.</p>
+</section>
+<section class="panel">
+  {% for app in applications %}
+    <a class="list-item" href="/applications/{{ app.id }}">
+      <strong>{{ app.company_name }}</strong>
+      <span>{{ app.job_title }} · {{ app.city or "Remote/Unknown" }} · {{ app.status }}</span>
+    </a>
+  {% else %}
+    <p class="empty">No applications yet.</p>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}OfferPilot Dashboard{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Evidence-first job search command center</p>
+    <h1>Track every application, force every AI recommendation to cite sources.</h1>
+    <p>Paste job links, upload notes, prepare interviews, and keep follow-ups grounded in source URLs.</p>
+    <form class="intake-form" method="post" action="/intake/job-link">
+      <label for="job-url">Job link</label>
+      <div>
+        <input id="job-url" name="url" type="url" required placeholder="https://www.zhipin.com/job_detail/example.html">
+        <button type="submit">Analyze</button>
+      </div>
+    </form>
+  </div>
+  <div class="quick-actions">
+    <a class="button" href="/intelligence">Open Intelligence</a>
+    <a class="button" href="/doctor">Run Doctor</a>
+    <a class="button secondary" href="/applications">View Pipeline</a>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="panel">
+    <h2>Applications</h2>
+    {% for app in applications %}
+      <a class="list-item" href="/applications/{{ app.id }}">
+        <strong>{{ app.company_name }}</strong>
+        <span>{{ app.job_title }} · {{ app.status }}</span>
+      </a>
+    {% else %}
+      <p class="empty">Run <code>offerpilot demo --reset</code> to load a complete sample.</p>
+    {% endfor %}
+  </div>
+  <div class="panel">
+    <h2>Today</h2>
+    {% for reminder in reminders %}
+      <div class="list-item">
+        <strong>P{{ reminder.priority }} {{ reminder.title }}</strong>
+        <span>{{ reminder.body }}</span>
+      </div>
+    {% else %}
+      <p class="empty">No pending reminders.</p>
+    {% endfor %}
+  </div>
+  <div class="panel wide">
+    <h2>Daily Intelligence</h2>
+    <form class="inline-form" method="post" action="/intelligence/daily">
+      <input name="role_family" value="backend" aria-label="Role family">
+      <input name="city" value="Shanghai" aria-label="City">
+      <button type="submit">Refresh Intelligence</button>
+    </form>
+    <div class="intel-grid">
+      {% for item in intelligence_items %}
+        <a class="intel-card" href="/intelligence">
+          <div class="intel-meta">
+            <span class="scale-badge">{{ item.company_scale }}</span>
+            <span class="signal-badge">{{ item.signal_type }}</span>
+            <span class="quality-badge">score {{ "%.2f"|format(item.relevance_score or 0) }}</span>
+          </div>
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.summary }}</p>
+          <span class="source">{{ item.publisher }} · {{ item.source_url }}</span>
+        </a>
+      {% else %}
+        <p class="empty">Run the daily intelligence brief to collect source-backed interview signals.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel wide">
+    <h2>Evidence Reports</h2>
+    {% for report in reports %}
+      <a class="list-item" href="/reports/{{ report.id }}">
+        <strong>{{ report.query }}</strong>
+        <span>{{ report.source_urls_json | length }} source URLs · confidence {{ report.confidence_score }}</span>
+      </a>
+    {% else %}
+      <p class="empty">No reports yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

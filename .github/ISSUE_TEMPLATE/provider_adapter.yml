@@ -1,0 +1,67 @@
+name: Provider adapter
+description: Propose or contribute a parser, search source, transcription provider, or analyzer adapter.
+title: "[Adapter]: "
+labels: ["adapter", "needs-triage"]
+body:
+  - type: dropdown
+    id: adapter_type
+    attributes:
+      label: Adapter Type
+      options:
+        - JobLinkParser
+        - SearchSource
+        - SearchProvider
+        - TranscriptionProvider
+        - InterviewAnalyzer
+        - EvidenceNormalizer
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source Or Provider
+      description: Name the platform, API, local model, or fixture. Include public docs links when available.
+    validations:
+      required: true
+  - type: textarea
+    id: returned_data
+    attributes:
+      label: Returned Data
+      description: List the fields this adapter can return, such as title, URL, snippet, transcript, confidence, source type, or query IDs.
+    validations:
+      required: true
+  - type: textarea
+    id: fail_closed
+    attributes:
+      label: Fail-Closed Behavior
+      description: How should the adapter behave when credentials, network access, permissions, or source URLs are missing?
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests Or Fixtures
+      description: Describe the fictional fixture, mock provider, or local command that proves the adapter contract.
+      placeholder: |
+        python -m pytest tests/test_provider_name.py
+        offerpilot analyze-link "https://example.com/jobs/backend-platform-intern" --json
+    validations:
+      required: true
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy And Terms
+      description: Note private-data boundaries, platform terms, robots constraints, and logs to avoid.
+    validations:
+      required: true
+  - type: checkboxes
+    id: contract
+    attributes:
+      label: Contract
+      options:
+        - label: The adapter will not fabricate source-backed evidence.
+          required: true
+        - label: The adapter will preserve `sourceUrls` or explain why the output is not a completed report.
+          required: true
+        - label: Tests or fixtures can run without real candidate data.
+          required: true

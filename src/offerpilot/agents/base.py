@@ -1,0 +1,9 @@
+from typing import Protocol
+
+
+class AgentProvider(Protocol):
+    def parse_job_link(self, url: str) -> dict: ...
+
+    def forced_search(self, company_name: str, job_title: str, jd_text: str) -> dict: ...
+
+    def analyze_interview(self, transcript: str) -> dict: ...

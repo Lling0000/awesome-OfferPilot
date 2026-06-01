@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Intelligence · OfferPilot{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Daily Intelligence</p>
+    <h1>Public Interview Signals</h1>
+    <p>Each finding keeps its source URL, signal type, company-scale label, and retrieval worker trace.</p>
+  </div>
+  <form class="artifact-form compact" method="post" action="/intelligence/daily">
+    <div class="form-row">
+      <label for="role-family">Role</label>
+      <input id="role-family" name="role_family" value="backend">
+    </div>
+    <div class="form-row">
+      <label for="city">City</label>
+      <input id="city" name="city" value="Shanghai">
+    </div>
+    <button type="submit">Run Brief</button>
+  </form>
+</section>
+
+<section class="grid">
+  <div class="panel wide">
+    <h2>Recent Briefs</h2>
+    {% for run in runs %}
+      <a class="list-item" href="/intelligence/{{ run.id }}">
+        <strong>{{ run.started_at or run.created_at }} · {{ (run.output_json or {}).get("sourceUrls", []) | length }} source URLs</strong>
+        <span>
+          {% set digest = (run.output_json or {}).get("digest", {}) %}
+          {% set by_scale = digest.get("by_company_scale", {}) %}
+          国央企 {{ by_scale.get("国央企", 0) }} · 大厂 {{ by_scale.get("大厂", 0) }} · 中厂 {{ by_scale.get("中厂", 0) }} · 小厂 {{ by_scale.get("小厂", 0) }}
+        </span>
+      </a>
+    {% else %}
+      <p class="empty">No intelligence briefs yet.</p>
+    {% endfor %}
+  </div>
+
+  <div class="panel wide">
+    <h2>Findings</h2>
+    <form class="inline-form" method="get" action="/intelligence">
+      <select name="company_scale" aria-label="Company scale">
+        <option value="">All scales</option>
+        {% for scale in company_scales %}
+          <option value="{{ scale }}" {{ "selected" if selected_company_scale == scale else "" }}>{{ scale }}</option>
+        {% endfor %}
+      </select>
+      <select name="signal_type" aria-label="Signal type">
+        <option value="">All signals</option>
+        {% for signal in signal_types %}
+          <option value="{{ signal }}" {{ "selected" if selected_signal_type == signal else "" }}>{{ signal }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+    <div class="intel-grid">
+      {% for item in items %}
+        <div class="intel-card">
+          <div class="intel-meta">
+            <span class="scale-badge">{{ item.company_scale }}</span>
+            <span class="signal-badge">{{ item.signal_type }}</span>
+            <span class="source-badge">{{ item.source_type }}</span>
+            <span class="quality-badge">{{ "strong" if (item.relevance_score or 0) >= 0.85 else "useful" }}</span>
+            {% if item.source_type == "social" %}
+              <span class="warning-badge">needs verification</span>
+            {% endif %}
+          </div>
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.summary }}</p>
+          <a class="source" href="{{ item.source_url }}">{{ item.publisher }} · {{ item.source_url }}</a>
+        </div>
+      {% else %}
+        <p class="empty">No findings match the current filters.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

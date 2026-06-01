@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">OfferPilot architecture</title>
+  <desc id="desc">Intake, forced search agents, evidence reports, reminders, and interview loop.</desc>
+  <rect width="1200" height="620" fill="#f6f7f9"/>
+  <text x="60" y="72" fill="#111827" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800">OfferPilot</text>
+  <text x="60" y="112" fill="#5b6472" font-family="Inter, Arial, sans-serif" font-size="22">Evidence-backed job search command center</text>
+
+  <g font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700">
+    <rect x="60" y="180" width="220" height="110" rx="14" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="92" y="226" fill="#0f766e">Multi-modal Intake</text>
+    <text x="92" y="258" fill="#5b6472" font-size="15" font-weight="500">links, notes, resumes, audio</text>
+
+    <rect x="360" y="180" width="220" height="110" rx="14" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="398" y="226" fill="#7c3aed">Query Planner</text>
+    <text x="398" y="258" fill="#5b6472" font-size="15" font-weight="500">company, role, skills, rounds</text>
+
+    <rect x="660" y="150" width="240" height="170" rx="14" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="702" y="194" fill="#0f766e">Forced Search Agents</text>
+    <text x="704" y="229" fill="#5b6472" font-size="15" font-weight="500">search engines</text>
+    <text x="704" y="254" fill="#5b6472" font-size="15" font-weight="500">forums and social posts</text>
+    <text x="704" y="279" fill="#5b6472" font-size="15" font-weight="500">official pages and freshness</text>
+
+    <rect x="980" y="180" width="160" height="110" rx="14" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="1018" y="226" fill="#7c3aed">Evidence</text>
+    <text x="1010" y="258" fill="#5b6472" font-size="15" font-weight="500">sourceUrls required</text>
+
+    <rect x="250" y="410" width="230" height="110" rx="14" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="297" y="456" fill="#0f766e">Application CRM</text>
+    <text x="288" y="488" fill="#5b6472" font-size="15" font-weight="500">status, resume, stage, notes</text>
+
+    <rect x="560" y="410" width="230" height="110" rx="14" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="596" y="456" fill="#7c3aed">Daily Reminders</text>
+    <text x="596" y="488" fill="#5b6472" font-size="15" font-weight="500">missing info, prep, follow-up</text>
+
+    <rect x="870" y="410" width="230" height="110" rx="14" fill="#ffffff" stroke="#d9dee7"/>
+    <text x="911" y="456" fill="#0f766e">Interview Loop</text>
+    <text x="910" y="488" fill="#5b6472" font-size="15" font-weight="500">prep, transcript, review</text>
+  </g>
+
+  <g stroke="#111827" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M280 235 H360"/>
+    <path d="M580 235 H660"/>
+    <path d="M900 235 H980"/>
+    <path d="M1060 290 C1050 370 1020 400 985 410"/>
+    <path d="M780 320 C720 370 690 390 675 410"/>
+    <path d="M470 290 C430 350 390 385 365 410"/>
+    <path d="M480 465 H560"/>
+    <path d="M790 465 H870"/>
+  </g>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#111827"/>
+    </marker>
+  </defs>
+</svg>

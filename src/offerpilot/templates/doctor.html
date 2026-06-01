@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Doctor · OfferPilot{% endblock %}
+{% block content %}
+<section class="page-head">
+  <h1>Doctor</h1>
+  <p>Readiness checks for local demo, schema, evidence constraints, and publish polish.</p>
+</section>
+<section class="panel">
+  {% for check in checks %}
+    <div class="check {{ 'ok' if check.ok else 'fail' }}">
+      <strong>{{ "OK" if check.ok else "FAIL" }} · {{ check.name }}</strong>
+      <span>{{ check.detail }}</span>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

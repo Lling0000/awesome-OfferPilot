@@ -1,0 +1,142 @@
+{
+  "fixture": true,
+  "generatedAt": "2026-06-01T09:00:00Z",
+  "input": {
+    "type": "job_link",
+    "platform": "Boss Zhipin",
+    "url": "https://www.zhipin.com/job_detail/example-backend-platform-intern.html?source=offerpilot-sample",
+    "userContext": {
+      "resumeArtifact": "examples/resumes/software-engineer-sample.md",
+      "targetRole": "Backend Platform Intern",
+      "inputModesUsed": ["link", "file", "text"]
+    }
+  },
+  "forcedSearch": {
+    "required": true,
+    "completed": true,
+    "queryCount": 5,
+    "notes": "Sample fixture. URLs are placeholders that demonstrate the sourceUrls contract."
+  },
+  "sourceUrls": [
+    {
+      "id": "src_001",
+      "url": "https://example.com/jobs/backend-platform-intern",
+      "title": "Backend Platform Intern - ExampleCo",
+      "sourceType": "job_post",
+      "retrievedAt": "2026-06-01T09:00:00Z",
+      "qualityScore": 0.82,
+      "freshnessScore": 0.74
+    },
+    {
+      "id": "src_002",
+      "url": "https://example.com/company/exampleco/careers",
+      "title": "ExampleCo Careers",
+      "sourceType": "company_site",
+      "retrievedAt": "2026-06-01T09:01:00Z",
+      "qualityScore": 0.9,
+      "freshnessScore": 0.8
+    },
+    {
+      "id": "src_003",
+      "url": "https://example.com/interview-reports/exampleco-backend-intern",
+      "title": "ExampleCo Backend Intern Interview Notes",
+      "sourceType": "interview_report",
+      "retrievedAt": "2026-06-01T09:02:00Z",
+      "qualityScore": 0.62,
+      "freshnessScore": 0.55
+    }
+  ],
+  "evidenceItems": [
+    {
+      "claim": "The sample role emphasizes backend APIs, SQL, and data pipeline work.",
+      "sourceIds": ["src_001"],
+      "confidence": "medium"
+    },
+    {
+      "claim": "The sample company careers page is the highest-quality source in this fixture.",
+      "sourceIds": ["src_002"],
+      "confidence": "high"
+    },
+    {
+      "claim": "Interview preparation should include backend project explanation and SQL fundamentals.",
+      "sourceIds": ["src_001", "src_003"],
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "oneLine": "A backend-platform internship lead that appears aligned with Python service and SQL experience, pending real source verification.",
+    "fit": "medium",
+    "why": [
+      {
+        "text": "The resume sample includes Python services, SQLite, dashboards, and evidence-linked reporting work.",
+        "basis": "user_artifact",
+        "artifact": "examples/resumes/software-engineer-sample.md"
+      },
+      {
+        "text": "The job-post-like source mentions backend API and data pipeline responsibilities.",
+        "basis": "sourced",
+        "sourceIds": ["src_001"]
+      }
+    ]
+  },
+  "risks": [
+    {
+      "risk": "The fixture URLs are placeholders, so a real run must refresh all sourceUrls.",
+      "severity": "high",
+      "sourceIds": []
+    },
+    {
+      "risk": "Work mode and office location are not confirmed.",
+      "severity": "medium",
+      "sourceIds": ["src_001"]
+    }
+  ],
+  "unknowns": [
+    "Whether the listing is still active.",
+    "Whether the next interview includes live coding.",
+    "Whether internship availability matches the team's schedule."
+  ],
+  "interviewPrep": [
+    {
+      "topic": "Backend project story",
+      "prompt": "Prepare one problem-action-result story about a Python service or data pipeline.",
+      "sourceIds": ["src_001", "src_003"]
+    },
+    {
+      "topic": "SQL fundamentals",
+      "prompt": "Review joins, grouping, indexes, and query debugging examples.",
+      "sourceIds": ["src_001"]
+    }
+  ],
+  "dailyReminderCandidates": [
+    {
+      "priority": "P0",
+      "message": "Record the next-step date after recruiter follow-up.",
+      "reason": "This changes the next action."
+    },
+    {
+      "priority": "P1",
+      "message": "Attach the resume version used for this application.",
+      "reason": "This improves later performance review."
+    },
+    {
+      "priority": "P1",
+      "message": "Refresh sourceUrls before technical interview preparation.",
+      "reason": "Reports must be based on current evidence."
+    }
+  ],
+  "recommendedNextActions": [
+    "Replace fixture links with real search results before using this report.",
+    "Confirm work mode, location, and technical interview format.",
+    "Prepare one backend project story and one SQL debugging example."
+  ],
+  "privacy": {
+    "containsUserPrivateData": true,
+    "privateArtifacts": [
+      "resume sample",
+      "application notes"
+    ],
+    "safeForPublicDemo": false,
+    "redactionRequiredBeforeSharing": true
+  }
+}

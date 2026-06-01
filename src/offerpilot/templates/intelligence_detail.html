@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Intelligence Brief · OfferPilot{% endblock %}
+{% block content %}
+{% if run %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Brief Detail</p>
+    <h1>Daily intelligence brief</h1>
+    <p>{{ run.started_at or run.created_at }} · {{ ((run.output_json or {}).get("sourceUrls", [])) | length }} source URLs</p>
+  </div>
+  <div class="quick-actions">
+    <a class="button" href="/intelligence">All Briefs</a>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="panel">
+    <h2>Digest</h2>
+    {% set digest = (run.output_json or {}).get("digest", {}) %}
+    {% set by_scale = digest.get("by_company_scale", {}) %}
+    <div class="metric-grid">
+      <div><strong>{{ by_scale.get("国央企", 0) }}</strong><span>国央企</span></div>
+      <div><strong>{{ by_scale.get("大厂", 0) }}</strong><span>大厂</span></div>
+      <div><strong>{{ by_scale.get("中厂", 0) }}</strong><span>中厂</span></div>
+      <div><strong>{{ by_scale.get("小厂", 0) }}</strong><span>小厂</span></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Manager / GD Matches</h2>
+    {% for title in digest.get("manager_or_gd_matches", []) %}
+      <div class="list-item">
+        <strong>{{ title }}</strong>
+      </div>
+    {% else %}
+      <p class="empty">No manager or GD signals in this brief.</p>
+    {% endfor %}
+  </div>
+  <div class="panel wide">
+    <h2>Agent Coverage</h2>
+    {% for child in child_runs %}
+      <div class="coverage-row">
+        <strong>{{ child.run_type }}</strong>
+        <span>{{ child.status }} · {{ (child.output_json or {}).get("found", 0) }} finding · {{ ((child.output_json or {}).get("sourceUrls", [])) | length }} source URL</span>
+        <code>{{ (child.input_json or {}).get("query", "") }}</code>
+      </div>
+    {% else %}
+      <p class="empty">No child agent runs stored.</p>
+    {% endfor %}
+  </div>
+  <div class="panel wide">
+    <h2>Findings</h2>
+    <div class="intel-grid">
+      {% for item in items %}
+        <div class="intel-card">
+          <div class="intel-meta">
+            <span class="scale-badge">{{ item.company_scale }}</span>
+            <span class="signal-badge">{{ item.signal_type }}</span>
+            <span class="source-badge">{{ item.source_type }}</span>
+            <span class="quality-badge">score {{ "%.2f"|format(item.relevance_score or 0) }}</span>
+            {% if item.source_type == "social" %}
+              <span class="warning-badge">needs verification</span>
+            {% endif %}
+          </div>
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.summary }}</p>
+          <a class="source" href="{{ item.source_url }}">{{ item.publisher }} · {{ item.source_url }}</a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% else %}
+<p class="empty">Intelligence brief not found.</p>
+{% endif %}
+{% endblock %}

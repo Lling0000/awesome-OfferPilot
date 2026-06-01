@@ -1,0 +1,57 @@
+name: Feature request
+description: Propose a user-facing or developer-facing OfferPilot capability.
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What job-search or contributor workflow should this improve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the smallest useful version.
+    validations:
+      required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: Success Criteria
+      description: What would make this ready to merge, demo, or ship?
+      placeholder: |
+        - The report keeps top-level sourceUrls.
+        - The demo still runs without provider credentials.
+        - The failure mode is visible to users.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Job link intake
+        - Source-backed reports
+        - Interview audio or notes
+        - Daily intelligence
+        - Reminders
+        - Provider adapters
+        - Documentation
+        - Developer tooling
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence And Source URLs
+      description: If the feature changes research/reporting behavior, what source URLs or evidence objects should be preserved?
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Boundaries
+      options:
+        - label: This proposal avoids auto-apply, resume spam, and unsupported claims.
+          required: true
+        - label: This proposal does not require committing real candidate data.
+          required: true

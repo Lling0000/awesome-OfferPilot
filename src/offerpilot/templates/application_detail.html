@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Application · OfferPilot{% endblock %}
+{% block content %}
+{% if application %}
+<section class="page-head">
+  <h1>{{ application.company_name }}</h1>
+  <p>{{ application.job_title }} · {{ application.status }}</p>
+</section>
+<section class="grid">
+  <div class="panel">
+    <h2>Opportunity</h2>
+    <p><strong>City:</strong> {{ application.city or "Unknown" }}</p>
+    <p><strong>Channel:</strong> {{ application.channel or "Unknown" }}</p>
+    <p><strong>Next action:</strong> {{ application.next_action_at or "Not set" }}</p>
+  </div>
+  <div class="panel">
+    <h2>Reports</h2>
+    {% for report in reports %}
+      <a class="list-item" href="/reports/{{ report.id }}">
+        <strong>{{ report.report_type }}</strong>
+        <span>{{ report.source_urls_json | length }} source URLs</span>
+      </a>
+    {% else %}
+      <p class="empty">No reports yet.</p>
+    {% endfor %}
+  </div>
+  <div class="panel wide">
+    <h2>Interview Intake</h2>
+    <form class="artifact-form" method="post" action="/applications/{{ application.id }}/interviews" enctype="multipart/form-data">
+      <div class="form-row">
+        <label for="stage">Stage</label>
+        <select id="stage" name="stage">
+          <option value="phone_screen">Phone screen</option>
+          <option value="technical" selected>Technical</option>
+          <option value="manager">Manager</option>
+          <option value="hr">HR</option>
+          <option value="final">Final</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="audio-file">Voice or recording</label>
+        <input id="audio-file" name="audio_file" type="file" accept="audio/*,video/*">
+      </div>
+      <div class="form-row">
+        <label for="typed-note">Typed notes</label>
+        <textarea id="typed-note" name="typed_note" rows="5" placeholder="Paste interview notes, transcript fragments, or questions you remember."></textarea>
+      </div>
+      <button type="submit">Analyze Interview</button>
+    </form>
+  </div>
+  <div class="panel wide">
+    <h2>Interview Summaries</h2>
+    {% for interview in interviews %}
+      <div class="interview-card">
+        <div class="interview-head">
+          <strong>{{ interview.stage }} · {{ interview.status }}</strong>
+          <span>{{ interview.created_at }}</span>
+        </div>
+        <p>{{ (interview.summary_json or {}).get("summary", "No summary yet.") }}</p>
+        <div class="mini-grid">
+          <div>
+            <h3>Questions</h3>
+            <ul>
+              {% for question in (interview.summary_json or {}).get("questions", []) %}
+                <li>{{ question }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div>
+            <h3>Next Focus</h3>
+            <ul>
+              {% for item in (interview.summary_json or {}).get("next_focus", []) %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <p class="empty">No interview summaries yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% else %}
+<p class="empty">Application not found.</p>
+{% endif %}
+{% endblock %}

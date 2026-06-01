@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">OfferPilot social card</title>
+  <desc id="desc">Evidence-backed job search tracking and interview preparation.</desc>
+  <rect width="1200" height="630" fill="#111827"/>
+  <rect x="52" y="52" width="1096" height="526" rx="28" fill="#f6f7f9"/>
+  <circle cx="1020" cy="130" r="54" fill="#0f766e"/>
+  <rect x="1048" y="438" width="58" height="58" rx="14" fill="#7c3aed"/>
+  <text x="100" y="155" fill="#0f766e" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800">OfferPilot</text>
+  <text x="100" y="252" fill="#111827" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="900">Job search reports</text>
+  <text x="100" y="322" fill="#111827" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="900">that cite sources.</text>
+  <text x="104" y="386" fill="#5b6472" font-family="Inter, Arial, sans-serif" font-size="25">Paste a job link. Track the pipeline. Prepare interviews.</text>
+  <text x="104" y="430" fill="#5b6472" font-family="Inter, Arial, sans-serif" font-size="25">Every AI recommendation keeps sourceUrls attached.</text>
+  <g font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">
+    <rect x="100" y="492" width="174" height="54" rx="12" fill="#0f766e"/>
+    <text x="127" y="527" fill="#ffffff">Forced Search</text>
+    <rect x="294" y="492" width="150" height="54" rx="12" fill="#7c3aed"/>
+    <text x="325" y="527" fill="#ffffff">sourceUrls</text>
+    <rect x="464" y="492" width="170" height="54" rx="12" fill="#111827"/>
+    <text x="492" y="527" fill="#ffffff">Daily Follow-up</text>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+# OfferPilot sample Boss Zhipin inputs
+#
+# These links are fixtures for parser and workflow examples. They are not
+# intended to describe real jobs. Replace them with real links during manual
+# testing, then run forced search before generating a report.
+
+https://www.zhipin.com/job_detail/example-backend-platform-intern.html?source=offerpilot-sample
+https://www.zhipin.com/job_detail/example-software-engineer-new-grad.html?source=offerpilot-sample
+https://www.zhipin.com/gongsi/example-exampleco.html?source=offerpilot-sample
+https://www.zhipin.com/web/geek/job?query=python%20software%20engineer&city=101020100&source=offerpilot-sample
+
+# Expected behavior:
+# 1. Parse the company, role, location, and platform from the input.
+# 2. Treat the parsed job post as a lead, not a complete truth.
+# 3. Run forced search for company, role, interview, and recent public signals.
+# 4. Return a report with top-level sourceUrls.
