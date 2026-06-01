@@ -16,6 +16,7 @@ These items should be true before the repository is announced or shared beyond a
 - [ ] `/intelligence/{run_id}` shows worker coverage and source URLs.
 - [ ] `/applications/{application_id}` shows interview intake and summaries.
 - [ ] `/reports/{search_report_id}` shows source URLs and evidence quality scores.
+- [ ] GitHub Actions is enabled and the CI workflow has at least one successful run before adding a CI badge.
 
 ```bash
 ruff format --check .

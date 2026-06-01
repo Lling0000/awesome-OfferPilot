@@ -1,6 +1,5 @@
 # OfferPilot
 
-[![CI](https://github.com/Lling0000/awesome-OfferPilot/actions/workflows/ci.yml/badge.svg)](https://github.com/Lling0000/awesome-OfferPilot/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Lling0000/awesome-OfferPilot?label=release)](https://github.com/Lling0000/awesome-OfferPilot/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
