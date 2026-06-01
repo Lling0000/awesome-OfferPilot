@@ -7,6 +7,8 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Local demo data is seeded by `src/offerpilot/seed.py`.
 - Mock provider boundaries live in `src/offerpilot/providers/mock.py`.
 - Search source contracts live in `src/offerpilot/providers/search_sources.py` and `docs/adapters.md`.
+- Job intake handles URLs and pasted JD text through the same source-backed report path.
+- Pasted JD text is private user context and must not be counted as public evidence.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
 - Source URL validation lives in `src/offerpilot/reports.py`.
 - Web routes live in `src/offerpilot/routes/web.py` and templates live in `src/offerpilot/templates/`.
@@ -54,9 +56,9 @@ Acceptance criteria:
 - Report pages still show top-level `sourceUrls`.
 - Documentation explains that unsupported claims should become unknowns instead of confident recommendations.
 
-### 3. Add Pasted JD Parser Fixtures
+### 3. Expand Pasted JD Parser Coverage
 
-Goal: make the job intake loop useful even when the user has no job-board URL.
+Goal: improve the pasted-JD parser beyond the current backend fixture and make it useful for more roles.
 
 Suggested paths:
 
@@ -64,15 +66,16 @@ Suggested paths:
 - `src/offerpilot/intake.py`
 - `src/offerpilot/routes/api.py`
 - `src/offerpilot/templates/dashboard.html`
+- `examples/job-descriptions/`
 - `tests/test_intake.py`
 - `tests/test_app.py`
 
 Acceptance criteria:
 
-- A pasted JD can create an application through the same source-backed report path as a URL.
-- The parser marks the source as pasted user input, not public evidence.
+- Fixtures cover at least backend, frontend, data, and product-style JD text.
+- Mixed Chinese/English JD fields can still produce stable company, role, city, and skill fields.
+- Pasted JD text remains user context, not public evidence.
 - The resulting report still requires external `sourceUrls` from the search provider.
-- Tests cover both URL input and pasted JD input.
 
 ### 4. Add A Fail-Closed External Search Adapter Skeleton
 

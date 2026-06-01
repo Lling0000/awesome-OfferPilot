@@ -10,6 +10,7 @@ def test_app_dashboard_renders(monkeypatch, tmp_path) -> None:
     assert response.status_code == 200
     assert "OfferPilot" in response.text
     assert "Evidence-first job search command center" in response.text
+    assert "Pasted JD" in response.text
 
 
 def test_job_link_intake_creates_application_report_and_reminders(monkeypatch, tmp_path) -> None:
@@ -29,6 +30,61 @@ def test_job_link_intake_creates_application_report_and_reminders(monkeypatch, t
     assert "Example Robotics" in dashboard.text
     assert "Example Robotics Backend Engineer Intern 面经 面试题" in dashboard.text
     assert "P0 跟进 Example Robotics 的下一步动作" in dashboard.text
+
+
+def test_pasted_jd_intake_creates_application_report_and_reminders(monkeypatch, tmp_path) -> None:
+    monkeypatch.setenv("OFFERPILOT_DATABASE_URL", f"sqlite:///{tmp_path}/offerpilot.db")
+    client = TestClient(create_app())
+
+    jd_text = """Company: Example Analytics
+Role: Backend Platform Intern
+City: Shanghai
+
+Build Python services with FastAPI, SQL, Redis, and async workflows.
+"""
+    response = client.post(
+        "/intake/job-description",
+        data={"jd_text": jd_text},
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 303
+    assert response.headers["location"].startswith("/applications/")
+
+    application = client.get(response.headers["location"])
+    assert "Example Analytics" in application.text
+    assert "Backend Platform Intern" in application.text
+    assert "Reports" in application.text
+
+    dashboard = client.get("/")
+    assert "Example Analytics Backend Platform Intern 面经 面试题" in dashboard.text
+    assert "source URLs" in dashboard.text
+
+
+def test_api_pasted_jd_intake_returns_source_urls(monkeypatch, tmp_path) -> None:
+    monkeypatch.setenv("OFFERPILOT_DATABASE_URL", f"sqlite:///{tmp_path}/offerpilot.db")
+    client = TestClient(create_app())
+
+    response = client.post(
+        "/api/job-descriptions",
+        json={
+            "jd_text": (
+                "Company: Example Analytics\n"
+                "Role: Backend Platform Intern\n"
+                "Build Python FastAPI services with SQL and Redis."
+            )
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["input_type"] == "pasted_jd"
+    assert payload["application_id"]
+    assert payload["search_report_id"]
+    assert payload["sourceUrls"]
+
+    apps = client.get("/api/applications").json()
+    assert apps[0]["company_name"] == "Example Analytics"
 
 
 def test_api_interview_intake_creates_summary(monkeypatch, tmp_path) -> None:

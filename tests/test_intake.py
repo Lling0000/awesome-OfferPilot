@@ -6,9 +6,21 @@ from typer.testing import CliRunner
 
 from offerpilot.cli import app
 from offerpilot.db import ensure_demo_user, reset_db, session_scope
-from offerpilot.intake import ResumeLookupError, run_job_link_intake
-from offerpilot.models import Application, EvidenceItem, Resume, SearchReport
+from offerpilot.intake import (
+    IntakeInputError,
+    ResumeLookupError,
+    run_job_link_intake,
+    run_pasted_jd_intake,
+)
+from offerpilot.models import AgentRun, Application, EvidenceItem, JobLink, Resume, SearchReport
 from offerpilot.providers import MockProviderBundle
+
+PASTED_JD = """Company: Example Analytics
+Role: Backend Platform Intern
+City: Shanghai
+
+Build Python services for candidate analytics with FastAPI, SQL, Redis, and async workflows.
+"""
 
 
 def test_provider_bundle_exposes_replaceable_interfaces() -> None:
@@ -89,6 +101,45 @@ def test_run_job_link_intake_rejects_missing_explicit_resume(tmp_path) -> None:
                 "https://www.zhipin.com/job_detail/missing-resume.html",
                 resume_id="missing-resume-id",
             )
+
+
+def test_run_pasted_jd_intake_creates_source_backed_flow(tmp_path) -> None:
+    db_url = f"sqlite:///{tmp_path}/offerpilot.db"
+    reset_db(db_url)
+
+    with session_scope(db_url) as session:
+        user = ensure_demo_user(session)
+        result = run_pasted_jd_intake(session, user, PASTED_JD)
+
+    with session_scope(db_url) as session:
+        app_record = session.get(Application, result["application_id"])
+        job_source = session.get(JobLink, result["job_link_id"])
+        report = session.get(SearchReport, result["search_report_id"])
+        evidence = session.scalars(select(EvidenceItem)).all()
+        run = session.scalars(select(AgentRun)).one()
+
+    assert result["input_type"] == "pasted_jd"
+    assert app_record.company_name == "Example Analytics"
+    assert app_record.job_title == "Backend Platform Intern"
+    assert app_record.channel == "pasted_jd"
+    assert job_source.raw_url.startswith("pasted-jd://")
+    assert job_source.parsed_payload["public_evidence"] is False
+    assert "FastAPI" in job_source.jd_text
+    assert report.source_urls_json
+    assert evidence
+    assert run.input_json["source_type"] == "pasted_jd"
+    assert "jd_text_chars" in run.input_json
+    assert "jd_text" not in run.input_json
+
+
+def test_run_pasted_jd_intake_rejects_short_text(tmp_path) -> None:
+    db_url = f"sqlite:///{tmp_path}/offerpilot.db"
+    reset_db(db_url)
+
+    with session_scope(db_url) as session:
+        user = ensure_demo_user(session)
+        with pytest.raises(IntakeInputError, match="too short"):
+            run_pasted_jd_intake(session, user, "too short")
 
 
 def test_cli_analyze_link_creates_flow(monkeypatch, tmp_path) -> None:

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, HttpUrl
@@ -6,7 +7,12 @@ from sqlalchemy import select
 
 from offerpilot.agents import MockAgentProvider
 from offerpilot.db import ensure_demo_user, session_scope
-from offerpilot.intake import run_job_link_intake
+from offerpilot.intake import (
+    IntakeInputError,
+    ResumeLookupError,
+    run_job_link_intake,
+    run_pasted_jd_intake,
+)
 from offerpilot.intelligence import (
     intelligence_child_runs,
     intelligence_item_to_dict,
@@ -25,6 +31,11 @@ router = APIRouter()
 
 class JobLinkCreate(BaseModel):
     url: HttpUrl
+
+
+class PastedJobDescriptionCreate(BaseModel):
+    jd_text: str
+    resume_id: Optional[str] = None
 
 
 class ApplicationCreate(BaseModel):
@@ -70,6 +81,22 @@ def create_job_link(payload: JobLinkCreate) -> dict:
             "application_id": result["application_id"],
             "search_report_id": result["search_report_id"],
         }
+
+
+@router.post("/job-descriptions")
+def create_pasted_job_description(payload: PastedJobDescriptionCreate) -> dict:
+    with session_scope() as session:
+        user = ensure_demo_user(session)
+        try:
+            result = run_pasted_jd_intake(
+                session,
+                user,
+                payload.jd_text,
+                resume_id=payload.resume_id,
+            )
+        except (IntakeInputError, ResumeLookupError) as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        return result
 
 
 @router.post("/job-links/{job_link_id}/create-application")

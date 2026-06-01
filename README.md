@@ -6,7 +6,7 @@
 
 Evidence-backed job search tracking and interview preparation for modern applicants.
 
-Paste a job link, upload a resume, or drop an interview note. OfferPilot turns scattered job-search context into an application pipeline, daily follow-ups, interview prep, and reports that keep every AI-generated recommendation tied to source URLs.
+Paste a job link, paste a full JD, upload a resume, or drop an interview note. OfferPilot turns scattered job-search context into an application pipeline, daily follow-ups, interview prep, and reports that keep every AI-generated recommendation tied to source URLs.
 
 ![OfferPilot dashboard](assets/screenshots/dashboard.png)
 
@@ -19,7 +19,7 @@ OfferPilot keeps that context in one place and forces every generated interview-
 ## What It Does
 
 - Track applications, resumes, interviews, follow-ups, and outcomes.
-- Parse job links and turn them into structured opportunities.
+- Parse job links or pasted JDs and turn them into structured opportunities.
 - Plan privacy-aware search queries from each job lead.
 - Generate interview prep with mandatory evidence links and source scores.
 - Normalize, deduplicate, and score public sources before analysis.
@@ -98,7 +98,7 @@ Run it repeatedly with:
 offerpilot demo --reset
 ```
 
-You can also paste a job URL directly from the dashboard. OfferPilot will parse it with the mock provider, create an application, run a forced-search report, and generate follow-up reminders.
+You can also paste a job URL or full JD directly from the dashboard. OfferPilot will parse it with the mock provider, create an application, run a forced-search report, and generate follow-up reminders. Pasted JD text is treated as private user context, not public evidence.
 
 Daily Intelligence is currently a deterministic fixture that demonstrates the audit contract: scoped workers, company-scale labels, interview-process signals, and source URLs. Open `/intelligence` after running the demo to inspect the brief list, filters, worker coverage, and retained findings.
 
@@ -189,7 +189,8 @@ The public roadmap lives in [docs/roadmap.md](docs/roadmap.md). It keeps the nea
 
 Current baseline:
 
-- Deterministic local adapters for parser, search, transcription, and analysis flows.
+- Deterministic local adapters for parser, pasted JD intake, search, transcription, and analysis flows.
+- Job intake handles Boss-style URLs and pasted JD text through the same source-backed report path.
 - A runnable `SearchSource` plugin example for contributors.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
@@ -199,7 +200,7 @@ Next contributor-friendly slices:
 
 - Add real `SearchSource` adapters that fail closed when credentials or network access are missing.
 - Improve evidence panels around source type, freshness, credibility, and score reasons.
-- Add parser fixtures for company career pages and pasted JD text.
+- Expand parser fixtures for company career pages, mixed-language JDs, and non-backend roles.
 - Add transcription provider adapters while keeping transcripts private user context, not public evidence.
 
 ## 中文说明

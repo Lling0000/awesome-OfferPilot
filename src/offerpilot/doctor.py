@@ -54,6 +54,7 @@ STRICT_FILES = [
     ".env.example",
     "examples/reports/job-report-with-sourceUrls.json",
     "examples/reports/daily-intelligence-with-sourceUrls.json",
+    "examples/job-descriptions/backend-platform-jd.txt",
     "docs/architecture.md",
     "docs/demo-script.md",
     "docs/launch-checklist.md",

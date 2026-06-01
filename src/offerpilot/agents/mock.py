@@ -10,6 +10,9 @@ class MockAgentProvider:
     def parse_job_link(self, url: str) -> dict:
         return self.providers.job_link_parser.parse(url)
 
+    def parse_job_description(self, jd_text: str) -> dict:
+        return self.providers.job_link_parser.parse_text(jd_text)
+
     def forced_search(self, company_name: str, job_title: str, jd_text: str) -> dict:
         return self.providers.search_provider.search(company_name, job_title, jd_text)
 

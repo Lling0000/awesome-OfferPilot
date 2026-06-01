@@ -5,13 +5,24 @@
   <div>
     <p class="eyebrow">Evidence-first job search command center</p>
     <h1>Track every application, force every AI recommendation to cite sources.</h1>
-    <p>Paste job links, upload notes, prepare interviews, and keep follow-ups grounded in source URLs.</p>
+    <p>Paste job links or full JDs, upload notes, prepare interviews, and keep follow-ups grounded in source URLs.</p>
     <form class="intake-form" method="post" action="/intake/job-link">
       <label for="job-url">Job link</label>
       <div>
         <input id="job-url" name="url" type="url" required placeholder="https://www.zhipin.com/job_detail/example.html">
         <button type="submit">Analyze</button>
       </div>
+    </form>
+    <form class="intake-form stacked" method="post" action="/intake/job-description">
+      <label for="jd-text">Pasted JD</label>
+      <textarea
+        id="jd-text"
+        name="jd_text"
+        required
+        rows="5"
+        placeholder="Company: Example Analytics&#10;Role: Backend Engineer Intern&#10;Build Python services with FastAPI, SQL, Redis, and async workflows."
+      ></textarea>
+      <button type="submit">Analyze JD</button>
     </form>
   </div>
   <div class="quick-actions">

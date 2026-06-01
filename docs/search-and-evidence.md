@@ -223,6 +223,20 @@ Expected execution flow:
 
 The command should fail closed when evidence is missing. A successful `analyze-link` run means the report is source-backed; a parser-only result is useful draft context, but it is not a completed research report.
 
+## Pasted JD Intake
+
+Pasted JD text follows the same report contract as job-link intake. OfferPilot can create an application from user-provided JD text, but that text is private context rather than public evidence.
+
+The pasted JD path should:
+
+- extract company, role, city, and skills when the fields are present,
+- create an application through the same forced-search flow as a URL,
+- keep the pasted JD out of `sourceUrls`,
+- require external search evidence before the report is considered completed,
+- store only a summary of the JD input in agent-run metadata when possible.
+
+Example fixture: `examples/job-descriptions/backend-platform-jd.txt`.
+
 ## Search Source Plugins
 
 `SearchSource` is the smallest retrieval extension point. A source receives one query-plan item and returns raw candidates. The default `LocalFixtureSearchSource` makes the project runnable without keys. Future sources can wrap a search API, forum adapter, social-search adapter, official-site crawler, or controlled local index.

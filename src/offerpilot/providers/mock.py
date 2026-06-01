@@ -22,6 +22,26 @@ class MockJobLinkParser:
             "parsed_at": datetime.utcnow().isoformat(),
         }
 
+    def parse_text(self, jd_text: str) -> dict:
+        company_name = _prefixed_value(jd_text, ("company", "公司")) or "Pasted JD Company"
+        job_title = _prefixed_value(
+            jd_text,
+            ("role", "title", "position", "job title", "岗位", "职位"),
+        ) or _infer_role(jd_text)
+        city = _prefixed_value(jd_text, ("city", "location", "城市", "地点"))
+        skills = extract_skill_terms(jd_text)
+        return {
+            "platform": "pasted_jd",
+            "source_type": "pasted_jd",
+            "company_name": company_name,
+            "job_title": job_title,
+            "city": city,
+            "jd_text": jd_text,
+            "skills": skills,
+            "public_evidence": False,
+            "parsed_at": datetime.utcnow().isoformat(),
+        }
+
 
 class MockSearchProvider:
     def __init__(self, sources: Iterable[SearchSource] = None) -> None:
@@ -113,3 +133,29 @@ class MockProviderBundle:
         self.search_provider = MockSearchProvider()
         self.transcription_provider = MockTranscriptionProvider()
         self.interview_analyzer = MockInterviewAnalyzer()
+
+
+def _prefixed_value(text: str, labels: tuple[str, ...]) -> str:
+    normalized_labels = {label.lower() for label in labels}
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        for separator in (":", "："):
+            if separator not in line:
+                continue
+            key, value = line.split(separator, 1)
+            if key.strip().lower() in normalized_labels:
+                return value.strip()
+    return ""
+
+
+def _infer_role(text: str) -> str:
+    lowered = text.lower()
+    if "frontend" in lowered or "react" in lowered or "前端" in text:
+        return "Frontend Engineer"
+    if "data" in lowered or "数据" in text:
+        return "Data Engineer"
+    if "backend" in lowered or "fastapi" in lowered or "后端" in text:
+        return "Backend Engineer"
+    return "Software Engineer"

@@ -1,0 +1,9 @@
+Company: Example Analytics
+Role: Backend Platform Intern
+City: Shanghai
+
+Build Python services for candidate analytics, interview scheduling, and evidence-backed
+job recommendations. The role works with FastAPI, SQL, Redis, async workflows, and
+privacy-aware search summaries.
+
+This fixture is fictional. It is user-provided job context, not public evidence.

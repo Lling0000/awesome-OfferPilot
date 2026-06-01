@@ -119,14 +119,29 @@ nav a {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
-.intake-form input {
+.intake-form input,
+.intake-form textarea {
   border: 1px solid var(--line);
   border-radius: 8px;
   color: var(--ink);
   font: inherit;
-  min-height: 44px;
   min-width: 0;
+  width: 100%;
+}
+
+.intake-form input {
+  min-height: 44px;
   padding: 0 12px;
+}
+
+.intake-form textarea {
+  min-height: 116px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.intake-form.stacked button {
+  margin-top: 10px;
 }
 
 .intake-form button {

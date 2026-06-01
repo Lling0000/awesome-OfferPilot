@@ -9,7 +9,7 @@ from starlette import status
 
 from offerpilot.db import ensure_demo_user, session_scope
 from offerpilot.doctor import run_doctor
-from offerpilot.intake import run_job_link_intake
+from offerpilot.intake import IntakeInputError, run_job_link_intake, run_pasted_jd_intake
 from offerpilot.intelligence import (
     COMPANY_SCALES,
     filtered_intelligence_items,
@@ -53,7 +53,24 @@ def dashboard(request: Request):
 def intake_job_link(url: str = Form(...)):
     with session_scope() as session:
         user = ensure_demo_user(session)
-        result = run_job_link_intake(session, user, url)
+        try:
+            result = run_job_link_intake(session, user, url)
+        except IntakeInputError:
+            return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
+        return RedirectResponse(
+            url=f"/applications/{result['application_id']}",
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+
+
+@router.post("/intake/job-description")
+def intake_job_description(jd_text: str = Form(...)):
+    with session_scope() as session:
+        user = ensure_demo_user(session)
+        try:
+            result = run_pasted_jd_intake(session, user, jd_text)
+        except IntakeInputError:
+            return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
         return RedirectResponse(
             url=f"/applications/{result['application_id']}",
             status_code=status.HTTP_303_SEE_OTHER,
