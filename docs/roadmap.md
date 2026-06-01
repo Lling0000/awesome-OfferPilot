@@ -7,6 +7,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Local demo data is seeded by `src/offerpilot/seed.py`.
 - Mock provider boundaries live in `src/offerpilot/providers/mock.py`.
 - Search source contracts live in `src/offerpilot/providers/search_sources.py` and `docs/adapters.md`.
+- The external search API skeleton fails closed until credentials, endpoint, and transport are configured.
 - Job intake handles URLs and pasted JD text through the same source-backed report path.
 - Pasted JD text is private user context and must not be counted as public evidence.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
@@ -77,26 +78,7 @@ Acceptance criteria:
 - Pasted JD text remains user context, not public evidence.
 - The resulting report still requires external `sourceUrls` from the search provider.
 
-### 4. Add A Fail-Closed External Search Adapter Skeleton
-
-Goal: make real provider work easy to start while keeping the demo honest.
-
-Suggested paths:
-
-- `src/offerpilot/providers/search_sources.py`
-- `docs/adapters.md`
-- `.env.example`
-- `.github/ISSUE_TEMPLATE/provider_adapter.yml`
-- `tests/test_search.py`
-
-Acceptance criteria:
-
-- Missing credentials raise `SearchSourceNotConfigured` with a setup hint.
-- The adapter never returns fake URLs to keep a report flowing.
-- Tests cover the unconfigured state.
-- Docs list required environment variables and expected returned fields.
-
-### 5. Add Interview Intake Fixtures
+### 4. Add Interview Intake Fixtures
 
 Goal: give contributors a safe way to test transcript-backed summaries without committing real recordings.
 

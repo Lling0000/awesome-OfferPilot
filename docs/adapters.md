@@ -84,6 +84,48 @@ if not api_key:
 
 This error is better than returning an empty report that looks successful, and much better than fabricating plausible links. The CLI and UI can then tell the user that the adapter needs setup.
 
+## External Search API Skeleton
+
+`ExternalSearchAPISource` is the starter class for real search providers. It does not make network calls by itself. Instead, it checks setup, builds a minimal provider payload, and calls an injected `transport` function. That keeps tests deterministic and makes missing setup fail before any report can pretend to be source-backed.
+
+Required environment variables:
+
+| Variable | Meaning |
+| --- | --- |
+| `SEARCH_PROVIDER_API_KEY` | Credential used by the provider transport. Missing values raise `SearchSourceNotConfigured`. |
+| `SEARCH_PROVIDER_ENDPOINT` | Provider endpoint URL. Missing values raise `SearchSourceNotConfigured`. |
+
+Minimal shape:
+
+```python
+from offerpilot.providers import ExternalSearchAPISource, MockSearchProvider
+
+
+def transport(endpoint: str, payload: dict, headers: dict) -> dict:
+    # Replace this with a provider SDK or HTTP request.
+    return {"results": []}
+
+
+source = ExternalSearchAPISource(transport=transport)
+provider = MockSearchProvider(sources=[source])
+```
+
+The transport should return either a list of candidates or a dict containing `results`, `items`, or `organic_results`. Returned candidates should use provider-native fields when possible:
+
+| Provider field | OfferPilot field |
+| --- | --- |
+| `title` or `name` | `title` |
+| `url` or `link` | `url` |
+| `snippet` or `description` | `snippet` |
+| `publisher`, `source`, or `displayed_link` | `publisher` |
+| `published_at` or `date` | `published_at` |
+| `source_type` | `source_type` |
+| `canonical_url` | `canonical_url` |
+
+Candidates without a URL are dropped. OfferPilot never invents URLs to keep a report flowing; if no linked candidates remain, the completed-report validator will still require valid top-level `sourceUrls`.
+
+When the provider does not expose a reliable candidate `source_type`, leave it unset and let the evidence normalizer infer the type from the URL.
+
 ## Minimal Example
 
 The runnable example in `examples/search-source-plugin` shows a tiny source that searches an in-memory dataset:

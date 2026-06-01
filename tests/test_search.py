@@ -1,6 +1,7 @@
 import pytest
 
 from offerpilot.providers import (
+    ExternalSearchAPISource,
     LocalFixtureSearchSource,
     MockSearchProvider,
     SearchSourceNotConfigured,
@@ -106,6 +107,75 @@ def test_unconfigured_external_source_fails_closed() -> None:
     source = UnconfiguredExternalSearchSource(name="serp-api")
     with pytest.raises(SearchSourceNotConfigured):
         source.search({"id": "q1"})
+
+
+def test_external_search_api_source_requires_clear_setup(monkeypatch) -> None:
+    monkeypatch.delenv("SEARCH_PROVIDER_API_KEY", raising=False)
+    monkeypatch.delenv("SEARCH_PROVIDER_ENDPOINT", raising=False)
+
+    source = ExternalSearchAPISource(name="live-serp")
+    with pytest.raises(SearchSourceNotConfigured, match="SEARCH_PROVIDER_API_KEY"):
+        source.search({"id": "q1", "query": "Example Robotics backend"})
+
+    monkeypatch.setenv("SEARCH_PROVIDER_API_KEY", "test-key")
+    with pytest.raises(SearchSourceNotConfigured, match="SEARCH_PROVIDER_ENDPOINT"):
+        source.search({"id": "q1", "query": "Example Robotics backend"})
+
+    monkeypatch.setenv("SEARCH_PROVIDER_ENDPOINT", "https://search.example.test/api")
+    with pytest.raises(SearchSourceNotConfigured, match="no transport"):
+        source.search({"id": "q1", "query": "Example Robotics backend"})
+
+
+def test_external_search_api_source_maps_transport_results_without_fake_urls() -> None:
+    calls = []
+
+    def fake_transport(endpoint: str, payload: dict, headers: dict) -> dict:
+        calls.append((endpoint, payload, headers))
+        return {
+            "results": [
+                {
+                    "title": "Example Robotics backend interview report",
+                    "link": "https://example.com/search-result",
+                    "snippet": "Candidate notes mention FastAPI and SQL.",
+                    "source": "Example Search",
+                    "date": "2026-04-01T00:00:00",
+                },
+                {
+                    "title": "Unlinked result should be ignored",
+                    "snippet": "No URL means no source-backed evidence.",
+                },
+            ]
+        }
+
+    source = ExternalSearchAPISource(
+        name="live-serp",
+        api_key="test-key",
+        endpoint="https://search.example.test/api",
+        transport=fake_transport,
+    )
+    results = source.search(
+        {
+            "id": "role-skills-questions",
+            "query": "Example Robotics backend interview",
+            "intent": "Find public evidence.",
+            "source_focus": "search_engine",
+        }
+    )
+
+    assert calls[0][0] == "https://search.example.test/api"
+    assert calls[0][1]["query"] == "Example Robotics backend interview"
+    assert calls[0][2]["Authorization"] == "Bearer test-key"
+    assert results == [
+        {
+            "title": "Example Robotics backend interview report",
+            "url": "https://example.com/search-result",
+            "snippet": "Candidate notes mention FastAPI and SQL.",
+            "publisher": "Example Search",
+            "published_at": "2026-04-01T00:00:00",
+            "retrieved_by": "live-serp",
+            "query_ids": ["role-skills-questions"],
+        }
+    ]
 
 
 def test_canonicalize_url_removes_fragment_and_trailing_slash() -> None:

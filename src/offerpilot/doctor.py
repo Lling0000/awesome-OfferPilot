@@ -172,6 +172,7 @@ STRICT_CONTENT_REQUIREMENTS = {
         ContentRequirement(
             "adapter contract fields",
             (
+                "Required Setup",
                 "Fail-Closed Behavior",
                 "Tests Or Fixtures",
                 "sourceUrls",
@@ -233,6 +234,26 @@ STRICT_CONTENT_REQUIREMENTS = {
                 "sourceUrls",
                 "Privacy Rules",
                 "Run `offerpilot doctor --strict-publish`",
+            ),
+        ),
+    ],
+    ".env.example": [
+        ContentRequirement(
+            "provider setup placeholders",
+            (
+                "SEARCH_PROVIDER_API_KEY=",
+                "SEARCH_PROVIDER_ENDPOINT=",
+                "TRANSCRIPTION_PROVIDER_API_KEY=",
+            ),
+        ),
+    ],
+    "docs/adapters.md": [
+        ContentRequirement(
+            "external search skeleton",
+            (
+                "ExternalSearchAPISource",
+                "SEARCH_PROVIDER_API_KEY",
+                "SEARCH_PROVIDER_ENDPOINT",
             ),
         ),
     ],

@@ -31,6 +31,16 @@ body:
     validations:
       required: true
   - type: textarea
+    id: setup
+    attributes:
+      label: Required Setup
+      description: List environment variables, credentials, endpoints, local models, or permissions needed. For SearchSource adapters, include any `SEARCH_PROVIDER_*` variables.
+      placeholder: |
+        SEARCH_PROVIDER_API_KEY=
+        SEARCH_PROVIDER_ENDPOINT=
+    validations:
+      required: true
+  - type: textarea
     id: fail_closed
     attributes:
       label: Fail-Closed Behavior

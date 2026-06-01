@@ -29,6 +29,7 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "docs/intelligence.md" in STRICT_FILES
     assert "docs/demo-script.md" in STRICT_FILES
     assert "docs/launch-checklist.md" in STRICT_FILES
+    assert ".env.example" in STRICT_FILES
     assert "examples/search-source-plugin/README.md" in STRICT_FILES
     assert "examples/search-source-plugin/example_source.py" in STRICT_FILES
     assert "examples/search-source-plugin/run_example.py" in STRICT_FILES

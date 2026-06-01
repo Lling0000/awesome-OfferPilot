@@ -51,7 +51,7 @@ After the demo runs, inspect [docs/adapters.md](docs/adapters.md) and run the mi
 python examples/search-source-plugin/run_example.py
 ```
 
-`SearchSource` is the best first contribution path today because it can add a real source without changing the rest of the application pipeline.
+`SearchSource` is the best first contribution path today because it can add a real source without changing the rest of the application pipeline. For live providers, start from `ExternalSearchAPISource`; it checks credentials and endpoint setup before any transport can return linked candidates.
 
 ## Verify The Project
 
@@ -140,7 +140,7 @@ OfferPilot is designed to move from the current deterministic mock agent into sm
 
 The adapters should keep the product honest: parsing is separate from query planning, query execution is separate from evidence normalization, and generated advice must still carry `sourceUrls`. A local mock adapter remains the default so new contributors can run the project without API keys, while production adapters can be added behind the same contract.
 
-External search sources fail closed by default. A source that is not configured should raise a clear setup error rather than returning an unsourced report.
+External search sources fail closed by default. A source that is not configured should raise a clear setup error rather than returning an unsourced report. The built-in `ExternalSearchAPISource` skeleton requires `SEARCH_PROVIDER_API_KEY`, `SEARCH_PROVIDER_ENDPOINT`, and an injected transport before it can return anything.
 
 See [docs/adapters.md](docs/adapters.md) for the adapter implementation checklist and [examples/search-source-plugin](examples/search-source-plugin) for a minimal `SearchSource` that works with `MockSearchProvider(sources=[...])`.
 
@@ -192,13 +192,14 @@ Current baseline:
 - Deterministic local adapters for parser, pasted JD intake, search, transcription, and analysis flows.
 - Job intake handles Boss-style URLs and pasted JD text through the same source-backed report path.
 - A runnable `SearchSource` plugin example for contributors.
+- A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
 - Strict publish checks that require evidence docs, examples, license, and `sourceUrls` validation.
 
 Next contributor-friendly slices:
 
-- Add real `SearchSource` adapters that fail closed when credentials or network access are missing.
+- Build real `SearchSource` adapters on top of `ExternalSearchAPISource` with provider-specific transports.
 - Improve evidence panels around source type, freshness, credibility, and score reasons.
 - Expand parser fixtures for company career pages, mixed-language JDs, and non-backend roles.
 - Add transcription provider adapters while keeping transcripts private user context, not public evidence.
