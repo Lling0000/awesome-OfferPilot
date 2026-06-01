@@ -1,5 +1,9 @@
 # OfferPilot
 
+[![CI](https://github.com/Lling0000/awesome-OfferPilot/actions/workflows/ci.yml/badge.svg)](https://github.com/Lling0000/awesome-OfferPilot/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+
 Evidence-backed job search tracking and interview preparation for modern applicants.
 
 Paste a job link, upload a resume, or drop an interview note. OfferPilot turns scattered job-search context into an application pipeline, daily follow-ups, interview prep, and reports that keep every AI-generated recommendation tied to source URLs.
