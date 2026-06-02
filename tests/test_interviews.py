@@ -27,9 +27,7 @@ def _interview_note_fixtures() -> list[dict]:
 
 
 def _interview_note_fixture(fixture_id: str) -> dict:
-    return next(
-        fixture for fixture in _interview_note_fixtures() if fixture["id"] == fixture_id
-    )
+    return next(fixture for fixture in _interview_note_fixtures() if fixture["id"] == fixture_id)
 
 
 def _question_lines(note_text: str) -> list[str]:

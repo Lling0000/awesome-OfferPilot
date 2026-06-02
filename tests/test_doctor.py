@@ -38,6 +38,8 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "examples/interview-notes/phone-screen.md" in STRICT_FILES
     assert "examples/interview-notes/technical-round.md" in STRICT_FILES
     assert "examples/interview-notes/audio-upload-metadata.json" in STRICT_FILES
+    assert "examples/reminders/README.md" in STRICT_FILES
+    assert "examples/reminders/daily-reminders.jsonl" in STRICT_FILES
     assert "examples/reports/daily-intelligence-with-sourceUrls.json" in STRICT_FILES
     assert "examples/job-links/boss-zhipin.txt" in STRICT_FILES
     assert "examples/job-links/boss-zhipin.jsonl" in STRICT_FILES
@@ -102,4 +104,9 @@ def test_strict_publish_rejects_placeholder_publish_files(tmp_path) -> None:
     assert (
         "structured interview-note fixture metadata"
         in checks["content:examples/interview-notes/interview-notes.jsonl"].detail
+    )
+    assert not checks["content:examples/reminders/daily-reminders.jsonl"].ok
+    assert (
+        "structured reminder fixture metadata"
+        in checks["content:examples/reminders/daily-reminders.jsonl"].detail
     )

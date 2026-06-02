@@ -95,9 +95,7 @@ def _normalize_transcription_response(
             "a transcript string or dict."
         )
 
-    transcript = str(
-        raw.get("transcript") or raw.get("text") or raw.get("content") or ""
-    ).strip()
+    transcript = str(raw.get("transcript") or raw.get("text") or raw.get("content") or "").strip()
     if not transcript:
         raise TranscriptionProviderResponseError(
             f"{provider_name} transport returned no transcript text."

@@ -21,6 +21,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Source URL validation lives in `src/offerpilot/reports.py`.
 - Interview-note fixtures include JSONL metadata, and audio-upload metadata fixtures live in `examples/interview-notes/`.
 - Interview transcripts are private user context and are not `sourceUrls`.
+- Daily reminder fixtures include JSONL metadata for missing workflow fields, expected reminder categories, and safe display without private `sourceUrls`.
 - Web routes live in `src/offerpilot/routes/web.py` and templates live in `src/offerpilot/templates/`.
 - API routes live in `src/offerpilot/routes/api.py`.
 - Runnable examples live in `examples/search-source-plugin/` and `examples/reports/`.
@@ -30,7 +31,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 Current contributor-friendly issues:
 
-- [#16 Add reminder fixture metadata for daily follow-ups](https://github.com/Lling0000/awesome-OfferPilot/issues/16)
+- [#17 Add structured metadata for daily intelligence fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/17)
 
 ## Larger Tracks
 

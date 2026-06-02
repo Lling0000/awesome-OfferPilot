@@ -38,9 +38,7 @@ def _job_link_fixtures(fixture_name: str) -> list[dict]:
 
 def _job_link_fixture(fixture_name: str, platform: str) -> dict:
     return next(
-        fixture
-        for fixture in _job_link_fixtures(fixture_name)
-        if fixture["platform"] == platform
+        fixture for fixture in _job_link_fixtures(fixture_name) if fixture["platform"] == platform
     )
 
 

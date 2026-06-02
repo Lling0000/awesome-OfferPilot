@@ -39,6 +39,7 @@ http://127.0.0.1:8000
 Expected UI outcomes:
 
 - `/` shows the OfferPilot dashboard with a demo application, Today reminders, a Daily Intelligence section, and Evidence Reports.
+- Today reminders demonstrate fixture-backed daily follow-ups for missing job links, resume versions, due follow-ups, interview prep, next step owner checks, follow-up due dates, and missing evidence links.
 - `/applications` shows the demo `Example Robotics` application in the interview pipeline.
 - `/applications/{application_id}` shows interview details plus an Interview Intake form for uploading a recording or pasting notes.
 - `/reports/{search_report_id}` shows a source-backed report, top-level source URLs, evidence quality labels, and relevance/freshness/credibility scores.
