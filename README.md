@@ -193,6 +193,7 @@ Current baseline:
 - Job intake handles Boss-style URLs and pasted JD text through the same source-backed report path.
 - A runnable `SearchSource` plugin example for contributors.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
+- Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
 - Strict publish checks that require evidence docs, examples, license, and `sourceUrls` validation.
@@ -200,7 +201,6 @@ Current baseline:
 Next contributor-friendly slices:
 
 - Build real `SearchSource` adapters on top of `ExternalSearchAPISource` with provider-specific transports.
-- Improve evidence panels around source type, freshness, credibility, and score reasons.
 - Expand parser fixtures for company career pages, mixed-language JDs, and non-backend roles.
 - Add transcription provider adapters while keeping transcripts private user context, not public evidence.
 

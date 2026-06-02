@@ -333,12 +333,15 @@ def get_search_report(report_id: str) -> dict:
                     "title": item.title,
                     "url": item.url,
                     "source_type": item.source_type,
+                    "publisher": item.publisher,
+                    "display_domain": (item.raw_json or {}).get("display_domain"),
                     "relevance_score": item.relevance_score,
                     "freshness_score": item.freshness_score,
                     "credibility_score": item.credibility_score,
                     "overall_score": (item.raw_json or {}).get("overall_score"),
                     "quality_label": (item.raw_json or {}).get("quality_label"),
                     "score_reasons": (item.raw_json or {}).get("score_reasons", []),
+                    "usage_guidance": (item.raw_json or {}).get("usage_guidance"),
                 }
                 for item in report.evidence_items
             ],

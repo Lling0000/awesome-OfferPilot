@@ -11,6 +11,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Job intake handles URLs and pasted JD text through the same source-backed report path.
 - Pasted JD text is private user context and must not be counted as public evidence.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
+- Report evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Source URL validation lives in `src/offerpilot/reports.py`.
 - Web routes live in `src/offerpilot/routes/web.py` and templates live in `src/offerpilot/templates/`.
 - API routes live in `src/offerpilot/routes/api.py`.
@@ -38,26 +39,7 @@ Acceptance criteria:
 - `pytest tests/test_adapter_example.py` passes.
 - The README states that the example is fixture-backed and not live search.
 
-### 2. Improve Evidence Score Explanations
-
-Goal: help users understand why a source is trusted, stale, weak, or only background context.
-
-Suggested paths:
-
-- `src/offerpilot/search.py`
-- `src/offerpilot/templates/reports.html`
-- `docs/search-and-evidence.md`
-- `tests/test_search.py`
-- `tests/test_app.py`
-
-Acceptance criteria:
-
-- Every displayed evidence item shows source type, publisher/domain, quality label, and score reasons.
-- Official/current sources score higher than older forum-style or weak background signals in deterministic tests.
-- Report pages still show top-level `sourceUrls`.
-- Documentation explains that unsupported claims should become unknowns instead of confident recommendations.
-
-### 3. Expand Pasted JD Parser Coverage
+### 2. Expand Pasted JD Parser Coverage
 
 Goal: improve the pasted-JD parser beyond the current backend fixture and make it useful for more roles.
 
@@ -78,7 +60,7 @@ Acceptance criteria:
 - Pasted JD text remains user context, not public evidence.
 - The resulting report still requires external `sourceUrls` from the search provider.
 
-### 4. Add Interview Intake Fixtures
+### 3. Add Interview Intake Fixtures
 
 Goal: give contributors a safe way to test transcript-backed summaries without committing real recordings.
 

@@ -20,22 +20,28 @@
   <div class="panel wide">
     <h2>Evidence Quality</h2>
     {% for item in evidence_items %}
+      {% set raw = item.raw_json or {} %}
       <div class="evidence-card">
-        <div>
-          <strong>{{ item.title or item.url }}</strong>
-          <span>
-            {{ item.source_type }} · {{ item.publisher or "unknown publisher" }}
-            · quality {{ (item.raw_json or {}).get("quality_label", "unknown") }}
-          </span>
+        <div class="evidence-head">
+          <div>
+            <strong>{{ item.title or item.url }}</strong>
+            <span>
+              {{ item.source_type }} · {{ item.publisher or raw.get("display_domain") or "unknown domain" }}
+            </span>
+          </div>
+          <span class="quality-pill">{{ raw.get("quality_label", "unknown") }}</span>
         </div>
         <div class="score-row">
-          <span>overall {{ "%.2f"|format((item.raw_json or {}).get("overall_score", 0)) }}</span>
+          <span>overall {{ "%.2f"|format(raw.get("overall_score", 0)) }}</span>
           <span>rel {{ "%.2f"|format(item.relevance_score or 0) }}</span>
           <span>fresh {{ "%.2f"|format(item.freshness_score or 0) }}</span>
           <span>trust {{ "%.2f"|format(item.credibility_score or 0) }}</span>
         </div>
+        <p class="usage-guidance">
+          {{ raw.get("usage_guidance", "Review this source before using it for confident claims.") }}
+        </p>
         <ul class="score-reasons">
-          {% for reason in (item.raw_json or {}).get("score_reasons", []) %}
+          {% for reason in raw.get("score_reasons", []) %}
             <li>{{ reason }}</li>
           {% endfor %}
         </ul>

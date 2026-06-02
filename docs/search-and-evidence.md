@@ -179,6 +179,8 @@ Suggested labels:
 
 The analyzer should use score reasons when wording claims. For example, an older interview report can support a historical note, but it should not be phrased as the current interview process unless newer sources corroborate it.
 
+Unsupported claims should become `unknowns`, not confident recommendations. If evidence is stale, weakly relevant, low credibility, or only background context, the report should say what is still unknown and what source would be needed to verify it. This is especially important for interview-process claims such as "manager round includes GD" or "third round focuses on system design"; those should require recent, source-backed corroboration before appearing as current facts.
+
 ## Source Quality Display
 
 The report page should show source quality in a way that helps users inspect the evidence quickly. For each evidence item, display:

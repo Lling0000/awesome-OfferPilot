@@ -311,6 +311,25 @@ nav a {
   padding: 14px;
 }
 
+.evidence-head {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.quality-pill {
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  color: #065f46 !important;
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 850;
+  padding: 4px 9px;
+  text-transform: uppercase;
+}
+
 .interview-card {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -476,6 +495,14 @@ nav a {
   padding: 4px 9px;
 }
 
+.usage-guidance {
+  background: #f8fafc;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+  margin: 12px 0 4px;
+  padding: 8px 10px;
+}
+
 .score-reasons {
   color: var(--muted);
   margin: 10px 0 4px;
@@ -533,6 +560,10 @@ nav a {
   .intel-grid,
   .metric-grid {
     grid-template-columns: 1fr;
+  }
+
+  .evidence-head {
+    flex-direction: column;
   }
 
   .intake-form div {

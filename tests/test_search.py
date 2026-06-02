@@ -49,8 +49,10 @@ def test_evidence_normalizer_dedupes_and_scores() -> None:
     assert items[0]["relevance_score"] > 0.6
     assert items[0]["credibility_score"] >= 0.5
     assert items[0]["overall_score"] > 0.6
-    assert items[0]["quality_label"] in {"medium", "high"}
+    assert items[0]["quality_label"] in {"limited", "strong", "excellent"}
     assert items[0]["score_reasons"]
+    assert items[0]["display_domain"] == "example.com"
+    assert "usage_guidance" in items[0]
 
 
 def test_mock_search_provider_returns_query_plan_and_scored_evidence() -> None:
@@ -64,7 +66,7 @@ def test_mock_search_provider_returns_query_plan_and_scored_evidence() -> None:
     assert result["source_urls"]
     assert result["evidence"][0]["relevance_score"] is not None
     assert result["evidence"][0]["overall_score"] is not None
-    assert result["evidence"][0]["quality_label"] in {"medium", "high"}
+    assert result["evidence"][0]["quality_label"] in {"limited", "strong", "excellent"}
     assert result["search_coverage"]["query_count"] == len(result["query_plan"])
     assert result["search_coverage"]["search_sources"] == ["local-fixtures"]
 
@@ -93,6 +95,44 @@ def test_search_source_plugin_contract_can_be_replaced() -> None:
 
     assert result["search_coverage"]["search_sources"] == ["tiny"]
     assert result["evidence"][0]["query_ids"]
+
+
+def test_official_current_sources_score_above_stale_weak_background() -> None:
+    items = normalize_evidence_items(
+        [
+            {
+                "title": "Example Robotics Backend Engineer Intern official role",
+                "url": "https://example.com/careers/backend-intern",
+                "snippet": "Official backend internship page mentions Python FastAPI SQL Redis.",
+                "source_type": "official",
+                "publisher": "Example Robotics",
+                "published_at": "2099-01-01T00:00:00",
+                "query_ids": ["company-official-stack"],
+            },
+            {
+                "title": "Old forum thread with generic internship advice",
+                "url": "https://nowcoder.com/discuss/old-general-advice",
+                "snippet": "Generic advice from an old thread without company details.",
+                "source_type": "forum",
+                "publisher": "Nowcoder",
+                "published_at": "2020-01-01T00:00:00",
+                "query_ids": ["role-skills-questions"],
+            },
+        ],
+        company_name="Example Robotics",
+        job_title="Backend Engineer Intern",
+        skills=["Python", "FastAPI", "SQL", "Redis"],
+    )
+
+    official = items[0]
+    stale = items[1]
+    assert official["url"] == "https://example.com/careers/backend-intern"
+    assert official["overall_score"] > stale["overall_score"]
+    assert official["quality_label"] in {"strong", "excellent"}
+    assert stale["quality_label"] == "background"
+    assert "high-trust publisher" in official["score_reasons"]
+    assert "stale evidence" in " ".join(stale["score_reasons"])
+    assert "historical context" in stale["usage_guidance"]
 
 
 def test_local_fixture_source_returns_query_ids() -> None:

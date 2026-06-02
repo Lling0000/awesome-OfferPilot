@@ -32,6 +32,29 @@ def test_job_link_intake_creates_application_report_and_reminders(monkeypatch, t
     assert "P0 跟进 Example Robotics 的下一步动作" in dashboard.text
 
 
+def test_report_page_displays_evidence_score_explanations(monkeypatch, tmp_path) -> None:
+    monkeypatch.setenv("OFFERPILOT_DATABASE_URL", f"sqlite:///{tmp_path}/offerpilot.db")
+    client = TestClient(create_app())
+
+    payload = client.post(
+        "/api/job-links",
+        json={"url": "https://www.zhipin.com/job_detail/example-backend-intern.html"},
+    ).json()
+
+    page = client.get(f"/reports/{payload['search_report_id']}")
+    assert page.status_code == 200
+    assert "Source URLs" in page.text
+    assert "Evidence Quality" in page.text
+    assert "example.com" in page.text
+    assert "high-trust publisher" in page.text
+    assert "Safe to use for normal report claims" in page.text
+
+    api_report = client.get(f"/api/search-reports/{payload['search_report_id']}").json()
+    assert api_report["sourceUrls"]
+    assert api_report["evidence"][0]["display_domain"] == "example.com"
+    assert api_report["evidence"][0]["usage_guidance"]
+
+
 def test_pasted_jd_intake_creates_application_report_and_reminders(monkeypatch, tmp_path) -> None:
     monkeypatch.setenv("OFFERPILOT_DATABASE_URL", f"sqlite:///{tmp_path}/offerpilot.db")
     client = TestClient(create_app())

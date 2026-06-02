@@ -108,26 +108,38 @@ def normalize_evidence_items(
             2,
         )
         overall = round(relevance * 0.5 + credibility * 0.3 + freshness * 0.2, 2)
+        reason_details = score_reason_details(
+            source_type,
+            relevance,
+            freshness,
+            credibility,
+            overall,
+        )
         enriched = {
             **item,
             "url": url,
             "canonical_url": canonical_url,
+            "display_domain": display_domain(canonical_url),
             "source_type": source_type,
             "relevance_score": relevance,
             "freshness_score": freshness,
             "credibility_score": credibility,
             "overall_score": overall,
-            "quality_label": quality_label(overall),
-            "score_reasons": score_reasons(source_type, relevance, freshness, credibility),
+            "quality_label": quality_label(overall, relevance, freshness, credibility),
+            "score_reason_details": reason_details,
+            "score_reasons": [
+                reason for key, reason in reason_details.items() if key != "usage"
+            ],
+            "usage_guidance": reason_details["usage"],
         }
         normalized_by_url[canonical_url] = enriched
     return sorted(
         normalized_by_url.values(),
         key=lambda item: (
-            item["relevance_score"],
             item["overall_score"],
             item["credibility_score"],
             item["freshness_score"],
+            item["relevance_score"],
         ),
         reverse=True,
     )
@@ -146,6 +158,11 @@ def infer_source_type(url: str) -> str:
     if "example.com" in host:
         return "official"
     return "unknown"
+
+
+def display_domain(url: str) -> str:
+    host = urlparse(url).netloc.lower()
+    return host[4:] if host.startswith("www.") else host
 
 
 def score_relevance(item: dict, company_name: str, job_title: str, skills: Iterable[str]) -> float:
@@ -179,35 +196,76 @@ def score_freshness(item: dict) -> float:
     return 0.35
 
 
-def quality_label(overall_score: float) -> str:
-    if overall_score >= 0.82:
-        return "high"
-    if overall_score >= 0.62:
-        return "medium"
-    return "low"
+def quality_label(
+    overall_score: float,
+    relevance_score: float = 0,
+    freshness_score: float = 0,
+    credibility_score: float = 0,
+) -> str:
+    weakest_component = min(relevance_score, freshness_score, credibility_score)
+    if overall_score >= 0.9 and weakest_component >= 0.7:
+        return "excellent"
+    if overall_score >= 0.75:
+        return "strong"
+    if overall_score >= 0.5:
+        return "limited"
+    if overall_score >= 0.2:
+        return "background"
+    return "do_not_use"
 
 
-def score_reasons(
+def score_reason_details(
     source_type: str,
     relevance_score: float,
     freshness_score: float,
     credibility_score: float,
-) -> List[str]:
-    reasons = [f"{source_type} source"]
+    overall_score: float,
+) -> dict:
+    reasons = {"source": f"{source_type} source"}
     if relevance_score >= 0.75:
-        reasons.append("strong company/role/skill match")
+        reasons["relevance"] = "strong company, role, or skill match"
     elif relevance_score >= 0.5:
-        reasons.append("partial match to the target role")
+        reasons["relevance"] = "partial match to the target role"
     else:
-        reasons.append("weak direct match")
+        reasons["relevance"] = "weak direct match; use as background only"
 
     if freshness_score >= 0.78:
-        reasons.append("recent evidence")
+        reasons["freshness"] = "recent evidence"
     elif freshness_score < 0.5:
-        reasons.append("older evidence")
+        reasons["freshness"] = "stale evidence; verify against newer sources"
+    else:
+        reasons["freshness"] = "dated but still potentially useful"
 
     if credibility_score >= 0.9:
-        reasons.append("high-trust publisher")
+        reasons["credibility"] = "high-trust publisher"
+    elif credibility_score >= 0.72:
+        reasons["credibility"] = "moderate-trust publisher"
     elif credibility_score < 0.65:
-        reasons.append("requires extra verification")
+        reasons["credibility"] = "requires extra verification"
+    else:
+        reasons["credibility"] = "use with corroboration"
+
+    reasons["usage"] = usage_guidance(
+        overall_score,
+        relevance_score,
+        freshness_score,
+        credibility_score,
+    )
     return reasons
+
+
+def usage_guidance(
+    overall_score: float,
+    relevance_score: float,
+    freshness_score: float,
+    credibility_score: float,
+) -> str:
+    if credibility_score < 0.5:
+        return "Do not use for claims until a more credible source confirms it."
+    if freshness_score < 0.5:
+        return "Use only for historical context unless a newer source corroborates it."
+    if relevance_score < 0.5 or overall_score < 0.5:
+        return "Treat as background context, not a central report claim."
+    if overall_score < 0.75:
+        return "Use cautiously and prefer corroboration before confident wording."
+    return "Safe to use for normal report claims when the summary cites this source."

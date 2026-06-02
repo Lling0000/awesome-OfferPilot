@@ -66,8 +66,15 @@ def test_example_candidates_can_be_normalized_and_scored() -> None:
     assert evidence[0]["freshness_score"] > 0
     assert evidence[0]["credibility_score"] > 0
     assert evidence[0]["overall_score"] > 0
-    assert evidence[0]["quality_label"] in {"high", "medium", "low"}
+    assert evidence[0]["quality_label"] in {
+        "excellent",
+        "strong",
+        "limited",
+        "background",
+        "do_not_use",
+    }
     assert evidence[0]["score_reasons"]
+    assert evidence[0]["usage_guidance"]
 
 
 def test_example_source_works_with_mock_search_provider() -> None:

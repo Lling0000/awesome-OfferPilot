@@ -257,6 +257,16 @@ STRICT_CONTENT_REQUIREMENTS = {
             ),
         ),
     ],
+    "docs/search-and-evidence.md": [
+        ContentRequirement(
+            "evidence display and unknowns guidance",
+            (
+                "Source Quality Display",
+                "Unsupported claims should become `unknowns`",
+                "score reasons",
+            ),
+        ),
+    ],
 }
 
 
