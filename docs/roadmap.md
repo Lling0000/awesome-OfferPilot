@@ -23,7 +23,11 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 ## Good First Issues
 
-The initial good-first queue has been implemented. New contributor-friendly issues should be opened from the larger tracks below, with deterministic fixtures and privacy boundaries before any live provider claim.
+The initial good-first queue has been implemented. Current contributor-friendly issues:
+
+- [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
+- [#7 Add fail-closed transcription provider skeleton](https://github.com/Lling0000/awesome-OfferPilot/issues/7)
+- [#8 Add claim-level sourceIds to reports](https://github.com/Lling0000/awesome-OfferPilot/issues/8)
 
 ## Larger Tracks
 

@@ -202,8 +202,9 @@ Current baseline:
 
 Next contributor-friendly slices:
 
-- Build real `SearchSource` adapters on top of `ExternalSearchAPISource` with provider-specific transports.
-- Add transcription provider adapters while keeping transcripts private user context, not public evidence.
+- [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
+- [#7 Add fail-closed transcription provider skeleton](https://github.com/Lling0000/awesome-OfferPilot/issues/7)
+- [#8 Add claim-level sourceIds to reports](https://github.com/Lling0000/awesome-OfferPilot/issues/8)
 
 ## 中文说明
 
