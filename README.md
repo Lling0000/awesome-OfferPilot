@@ -213,7 +213,7 @@ Current baseline:
 
 Next contributor-friendly slices:
 
-- [#19 Add JSONL fixture schema validator for examples](https://github.com/Lling0000/awesome-OfferPilot/issues/19)
+- [#20 Add fixture authoring guide for contributors](https://github.com/Lling0000/awesome-OfferPilot/issues/20)
 
 ## 中文说明
 

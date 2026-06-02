@@ -1,7 +1,14 @@
 from pathlib import Path
 
 from offerpilot.db import reset_db
-from offerpilot.doctor import STRICT_FILES, _strict_file_checks, checks_ok, run_doctor
+from offerpilot.doctor import (
+    STRICT_FILES,
+    _strict_file_checks,
+    _structured_jsonl_fixture_files,
+    _validate_jsonl_fixture_metadata,
+    checks_ok,
+    run_doctor,
+)
 
 
 def test_doctor_passes_after_schema_init(tmp_path) -> None:
@@ -72,6 +79,56 @@ def test_strict_publish_checks_required_content_markers() -> None:
     assert checks_ok(content_checks)
 
 
+def test_strict_publish_validates_structured_jsonl_fixture_metadata() -> None:
+    checks = list(_strict_file_checks(root=Path(".")))
+    jsonl_checks = [check for check in checks if check.name.startswith("jsonl:")]
+
+    assert len(jsonl_checks) == len(_structured_jsonl_fixture_files()) + 2
+    assert "jsonl:fixture_registry" in {check.name for check in jsonl_checks}
+    assert "jsonl:fixture_ids" in {check.name for check in jsonl_checks}
+    assert "jsonl:examples/reports/report-fixtures.jsonl" in {check.name for check in jsonl_checks}
+    assert checks_ok(jsonl_checks)
+
+
+def test_jsonl_fixture_validator_rejects_bad_fixture_metadata(tmp_path) -> None:
+    fixture = tmp_path / "bad-fixtures.jsonl"
+    fixture.write_text(
+        "\n".join(
+            [
+                (
+                    '{"id": "dup", "application_state": {}, "missing_fields": [], '
+                    '"expected_reminder_type": "missing_info", '
+                    '"safe_without_private_sourceUrls": true, "privacy": "workflow_metadata", '
+                    '"public_evidence": true, "sourceUrls": ["not-a-url"], '
+                    '"completed_report_requirement": "Completed reports require sourceUrls."}'
+                ),
+                (
+                    '{"id": "dup", "fixture_type": "daily_reminder_case", '
+                    '"application_state": {}, "missing_fields": [], '
+                    '"expected_reminder_type": "missing_info", '
+                    '"safe_without_private_sourceUrls": true, "privacy": "workflow_metadata", '
+                    '"public_evidence": false, '
+                    '"sourceUrls": ["https://example.com/private"], '
+                    '"completed_report_requirement": "No source boundary here."}'
+                ),
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    check = _validate_jsonl_fixture_metadata(
+        fixture,
+        "examples/reminders/daily-reminders.jsonl",
+        root=tmp_path,
+    )
+
+    assert not check.ok
+    assert "missing required field fixture_type" in check.detail
+    assert "duplicate id dup" in check.detail
+    assert "invalid sourceUrls" in check.detail
+    assert "private/non-public rows must keep sourceUrls=[]" in check.detail
+
+
 def test_strict_publish_rejects_placeholder_publish_files(tmp_path) -> None:
     for rel in STRICT_FILES:
         path = tmp_path / rel
@@ -84,43 +141,19 @@ def test_strict_publish_rejects_placeholder_publish_files(tmp_path) -> None:
     assert "package discovery metadata" in checks["content:pyproject.toml"].detail
     assert not checks["content:.github/workflows/ci.yml"].ok
     assert "Python version matrix" in checks["content:.github/workflows/ci.yml"].detail
-    assert not checks["content:examples/job-links/boss-zhipin.jsonl"].ok
-    assert (
-        "structured Boss-style fixture metadata"
-        in checks["content:examples/job-links/boss-zhipin.jsonl"].detail
-    )
-    assert not checks["content:examples/job-links/company-careers.jsonl"].ok
-    assert (
-        "structured company and mirror fixture metadata"
-        in checks["content:examples/job-links/company-careers.jsonl"].detail
-    )
-    assert not checks["content:examples/job-links/shared-links.jsonl"].ok
-    assert (
-        "structured job-link fixture metadata"
-        in checks["content:examples/job-links/shared-links.jsonl"].detail
-    )
-    assert not checks["content:examples/job-descriptions/pasted-jds.jsonl"].ok
-    assert (
-        "structured pasted JD fixture metadata"
-        in checks["content:examples/job-descriptions/pasted-jds.jsonl"].detail
-    )
-    assert not checks["content:examples/interview-notes/interview-notes.jsonl"].ok
-    assert (
-        "structured interview-note fixture metadata"
-        in checks["content:examples/interview-notes/interview-notes.jsonl"].detail
-    )
-    assert not checks["content:examples/reminders/daily-reminders.jsonl"].ok
-    assert (
-        "structured reminder fixture metadata"
-        in checks["content:examples/reminders/daily-reminders.jsonl"].detail
-    )
-    assert not checks["content:examples/intelligence/daily-intelligence.jsonl"].ok
-    assert (
-        "structured daily-intelligence fixture metadata"
-        in checks["content:examples/intelligence/daily-intelligence.jsonl"].detail
-    )
-    assert not checks["content:examples/reports/report-fixtures.jsonl"].ok
-    assert (
-        "structured report fixture metadata"
-        in checks["content:examples/reports/report-fixtures.jsonl"].detail
-    )
+    assert not checks["jsonl:examples/job-links/boss-zhipin.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/job-links/boss-zhipin.jsonl"].detail
+    assert not checks["jsonl:examples/job-links/company-careers.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/job-links/company-careers.jsonl"].detail
+    assert not checks["jsonl:examples/job-links/shared-links.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/job-links/shared-links.jsonl"].detail
+    assert not checks["jsonl:examples/job-descriptions/pasted-jds.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/job-descriptions/pasted-jds.jsonl"].detail
+    assert not checks["jsonl:examples/interview-notes/interview-notes.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/interview-notes/interview-notes.jsonl"].detail
+    assert not checks["jsonl:examples/reminders/daily-reminders.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/reminders/daily-reminders.jsonl"].detail
+    assert not checks["jsonl:examples/intelligence/daily-intelligence.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/intelligence/daily-intelligence.jsonl"].detail
+    assert not checks["jsonl:examples/reports/report-fixtures.jsonl"].ok
+    assert "invalid JSON" in checks["jsonl:examples/reports/report-fixtures.jsonl"].detail

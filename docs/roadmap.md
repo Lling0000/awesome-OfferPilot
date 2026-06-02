@@ -33,7 +33,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 Current contributor-friendly issues:
 
-- [#19 Add JSONL fixture schema validator for examples](https://github.com/Lling0000/awesome-OfferPilot/issues/19)
+- [#20 Add fixture authoring guide for contributors](https://github.com/Lling0000/awesome-OfferPilot/issues/20)
 
 ## Larger Tracks
 

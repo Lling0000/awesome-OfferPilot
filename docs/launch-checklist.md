@@ -26,6 +26,8 @@ offerpilot demo --reset
 offerpilot doctor --strict-publish
 ```
 
+`offerpilot doctor --strict-publish` also validates structured JSONL fixture metadata under `examples/**/*.jsonl`: valid JSON lines, globally unique IDs, required fixture type fields, cross-file registration, and sourceUrls/privacy boundaries.
+
 ### Evidence Contract
 
 - [ ] Completed reports require top-level `sourceUrls`.
@@ -35,6 +37,7 @@ offerpilot doctor --strict-publish
 - [ ] Social/forum-style signals are marked as needing verification.
 - [ ] Unsupported claims become unknowns instead of confident statements.
 - [ ] Fixtures use fictional companies and sample URLs; no fixture is presented as current live hiring intelligence.
+- [ ] Structured JSONL fixture metadata passes strict-publish validation for IDs, fixture type fields, and sourceUrls/privacy boundaries.
 
 ### Privacy And Safety
 
