@@ -9,6 +9,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Search source contracts live in `src/offerpilot/providers/search_sources.py` and `docs/adapters.md`.
 - The external search API skeleton fails closed until credentials, endpoint, and transport are configured.
 - The external transcription provider skeleton fails closed until credentials, endpoint, and transport are configured.
+- The transcription transport plugin example runs without real audio, API keys, or network access.
 - Job intake handles URLs and pasted JD text through the same source-backed report path.
 - Company career-page and mirrored job-board fixtures exercise non-Boss job-link parsing.
 - Pasted JD text is private user context and must not be counted as public evidence.
@@ -28,7 +29,6 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 Current contributor-friendly issues:
 
-- [#10 Add transcription transport example fixture](https://github.com/Lling0000/awesome-OfferPilot/issues/10)
 - [#11 Add shared job-link parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/11)
 
 ## Larger Tracks

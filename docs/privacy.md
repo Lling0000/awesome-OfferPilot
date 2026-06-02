@@ -119,6 +119,8 @@ Interview transcripts, typed notes, and audio-derived text are not public eviden
 
 Provider-returned transcript metadata should keep `sourceUrls: []`. A transcript can support a private interview summary and next-focus list, but public report claims still need external evidence URLs.
 
+The fixture-backed example in `examples/transcription-provider-plugin/` is safe to commit because it uses a pretend file path and deterministic transcript text. Real speech-to-text adapters should follow the same output shape but must not commit real recordings, transcripts, API keys, or provider responses.
+
 ## Security Relationship
 
 Privacy and security overlap. Vulnerabilities that expose resumes, voice transcripts, files, application records, reminders, or evidence reports should be reported through the process in `SECURITY.md`.

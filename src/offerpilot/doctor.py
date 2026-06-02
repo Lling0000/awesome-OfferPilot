@@ -79,6 +79,9 @@ STRICT_FILES = [
     "examples/search-source-plugin/README.md",
     "examples/search-source-plugin/example_source.py",
     "examples/search-source-plugin/run_example.py",
+    "examples/transcription-provider-plugin/README.md",
+    "examples/transcription-provider-plugin/example_transport.py",
+    "examples/transcription-provider-plugin/run_example.py",
 ]
 
 STRICT_CONTENT_REQUIREMENTS = {
@@ -297,6 +300,16 @@ STRICT_CONTENT_REQUIREMENTS = {
                 "fictional and safe to commit",
                 "metadata for a pretend uploaded audio file",
                 "Interview transcripts must not appear in `sourceUrls`",
+            ),
+        ),
+    ],
+    "examples/transcription-provider-plugin/README.md": [
+        ContentRequirement(
+            "fixture-backed transcription provider example",
+            (
+                "ExternalTranscriptionProvider",
+                "private_user_context",
+                "sourceUrls: []",
             ),
         ),
     ],

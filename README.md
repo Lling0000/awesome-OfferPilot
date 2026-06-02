@@ -200,6 +200,7 @@ Current baseline:
 - A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
 - A fail-closed `ExternalTranscriptionProvider` skeleton for speech-to-text work that keeps transcripts private.
+- A runnable fixture-backed transcription transport example with no real audio, API keys, or network calls.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Report claim sections cite stored evidence item IDs with `sourceIds`, link those IDs to evidence cards, and turn weak sources into `unknowns`.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
@@ -209,7 +210,6 @@ Current baseline:
 
 Next contributor-friendly slices:
 
-- [#10 Add transcription transport example fixture](https://github.com/Lling0000/awesome-OfferPilot/issues/10)
 - [#11 Add shared job-link parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/11)
 
 ## 中文说明

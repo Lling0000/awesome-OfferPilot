@@ -1,24 +1,36 @@
 import importlib.util
+import json
 import subprocess
 import sys
 from pathlib import Path
 
-from offerpilot.providers import MockSearchProvider
+from offerpilot.providers import ExternalTranscriptionProvider, MockSearchProvider
 from offerpilot.reports import validate_source_urls
 from offerpilot.search import normalize_evidence_items
 
 ROOT = Path(__file__).resolve().parents[1]
-EXAMPLE_DIR = ROOT / "examples" / "search-source-plugin"
+SEARCH_EXAMPLE_DIR = ROOT / "examples" / "search-source-plugin"
+TRANSCRIPTION_EXAMPLE_DIR = ROOT / "examples" / "transcription-provider-plugin"
 
 
 def load_example_source():
-    module_path = EXAMPLE_DIR / "example_source.py"
+    module_path = SEARCH_EXAMPLE_DIR / "example_source.py"
     spec = importlib.util.spec_from_file_location("example_source", module_path)
     assert spec is not None
     assert spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module.ExampleSearchSource
+
+
+def load_example_transcription_transport():
+    module_path = TRANSCRIPTION_EXAMPLE_DIR / "example_transport.py"
+    spec = importlib.util.spec_from_file_location("example_transport", module_path)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.fixture_transcription_transport
 
 
 def test_example_search_source_returns_traceable_candidates() -> None:
@@ -99,7 +111,7 @@ def test_example_source_works_with_mock_search_provider() -> None:
 
 def test_example_runner_outputs_source_urls() -> None:
     completed = subprocess.run(
-        [sys.executable, str(EXAMPLE_DIR / "run_example.py")],
+        [sys.executable, str(SEARCH_EXAMPLE_DIR / "run_example.py")],
         check=True,
         capture_output=True,
         text=True,
@@ -108,3 +120,36 @@ def test_example_runner_outputs_source_urls() -> None:
 
     assert "sourceUrls" in completed.stdout
     assert "example-source" in completed.stdout
+
+
+def test_example_transcription_transport_marks_output_private() -> None:
+    transport = load_example_transcription_transport()
+    provider = ExternalTranscriptionProvider(
+        api_key="fixture-key",
+        endpoint="https://stt.example.test/v1/transcriptions",
+        transport=transport,
+    )
+
+    result = provider.transcribe("example-technical-round.m4a")
+
+    assert result["privacy"] == "private_user_context"
+    assert result["sourceUrls"] == []
+    assert "SQL indexes" in result["transcript"]
+    assert result["confidence"] == 0.86
+    assert result["quality_notes"]
+
+
+def test_transcription_example_runner_outputs_private_transcript() -> None:
+    completed = subprocess.run(
+        [sys.executable, str(TRANSCRIPTION_EXAMPLE_DIR / "run_example.py")],
+        check=True,
+        capture_output=True,
+        text=True,
+        cwd=ROOT,
+    )
+    payload = json.loads(completed.stdout)
+
+    assert payload["privacy"] == "private_user_context"
+    assert payload["sourceUrls"] == []
+    assert payload["confidence"] == 0.86
+    assert "Fixture transcript" in payload["transcriptPreview"]

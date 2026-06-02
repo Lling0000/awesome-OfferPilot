@@ -162,7 +162,7 @@ The normalized result always includes:
 
 Provider-returned `sourceUrls` are discarded. Interview transcripts can help summarize a user's own interview, but they are not public evidence and must not be cited as report sources.
 
-## Minimal Example
+## Minimal Examples
 
 The runnable example in `examples/search-source-plugin` shows a tiny source that searches an in-memory dataset:
 
@@ -171,6 +171,14 @@ python examples/search-source-plugin/run_example.py
 ```
 
 The example intentionally avoids network calls. It proves the plugin shape, returned candidate fields, and `MockSearchProvider(sources=[...])` replacement path without requiring credentials.
+
+The runnable example in `examples/transcription-provider-plugin` shows a tiny transcription transport:
+
+```bash
+python examples/transcription-provider-plugin/run_example.py
+```
+
+The example intentionally avoids real audio files, API keys, and network calls. It proves the `ExternalTranscriptionProvider(transport=...)` replacement path and shows that normalized transcripts stay `private_user_context` with `sourceUrls: []`. For a real provider, replace `fixture_transcription_transport` with a provider SDK or HTTP request, then pass credentials through `TRANSCRIPTION_PROVIDER_API_KEY` and `TRANSCRIPTION_PROVIDER_ENDPOINT`.
 
 ## Adapter Implementation Checklist
 
