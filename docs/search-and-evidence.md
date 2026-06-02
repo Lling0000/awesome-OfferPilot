@@ -101,7 +101,7 @@ If two sources conflict, the normalizer should preserve both records and mark th
 
 ## Evidence Object
 
-Future reports should use an evidence object close to this shape:
+Reports should use an evidence object close to this shape:
 
 ```json
 {
@@ -139,6 +139,8 @@ Report sections can then reference evidence by ID:
   "confidence": "medium"
 }
 ```
+
+The current app exposes this as a minimal `claimSections` layer in report API responses and the report page. Supported claims cite stored `EvidenceItem.id` values through `sourceIds`; stale, weak, or low-credibility sources are placed in `unknowns` so the UI does not turn background evidence into confident guidance.
 
 ## Required Report Fields
 
@@ -198,7 +200,7 @@ Recommended UI behavior:
 - Sort sources by `overall` score by default, with official and exact-match sources near the top.
 - Show low freshness or low credibility warnings visibly.
 - Keep `sourceUrls` accessible even when the report summary is collapsed.
-- Let report sections reference source IDs so users can jump from a claim to its supporting evidence.
+- Let report sections reference source IDs so users can jump from a claim to its supporting evidence. The current `claimSections` implementation references stored evidence item IDs directly.
 - Avoid hiding weak sources entirely; downgraded sources are useful for explaining uncertainty and conflicts.
 
 ## CLI: `analyze-link`

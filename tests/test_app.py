@@ -44,6 +44,7 @@ def test_report_page_displays_evidence_score_explanations(monkeypatch, tmp_path)
     page = client.get(f"/reports/{payload['search_report_id']}")
     assert page.status_code == 200
     assert "Source URLs" in page.text
+    assert "Claim Evidence" in page.text
     assert "Evidence Quality" in page.text
     assert "example.com" in page.text
     assert "high-trust publisher" in page.text
@@ -51,6 +52,22 @@ def test_report_page_displays_evidence_score_explanations(monkeypatch, tmp_path)
 
     api_report = client.get(f"/api/search-reports/{payload['search_report_id']}").json()
     assert api_report["sourceUrls"]
+    evidence_ids = {item["id"] for item in api_report["evidence"]}
+    claim_source_ids = {
+        source_id
+        for section in api_report["claimSections"]
+        for claim in section["claims"]
+        for source_id in claim["sourceIds"]
+    }
+    unknown_source_ids = {
+        source_id
+        for section in api_report["claimSections"]
+        for unknown in section["unknowns"]
+        for source_id in unknown["sourceIds"]
+    }
+    assert claim_source_ids
+    assert claim_source_ids <= evidence_ids
+    assert unknown_source_ids <= evidence_ids
     assert api_report["evidence"][0]["display_domain"] == "example.com"
     assert api_report["evidence"][0]["usage_guidance"]
 

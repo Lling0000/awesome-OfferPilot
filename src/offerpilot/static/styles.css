@@ -479,6 +479,52 @@ nav a {
   color: var(--muted);
 }
 
+.claim-section h3 {
+  font-size: 15px;
+  margin: 0 0 10px;
+}
+
+.claim-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 12px;
+}
+
+.claim-card strong,
+.claim-card span {
+  display: block;
+}
+
+.claim-card span {
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.muted-card {
+  background: #f8fafc;
+}
+
+.source-id-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.source-id-row code,
+.evidence-id {
+  background: #f3f4f6;
+  border-radius: 6px;
+  color: #374151;
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 6px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 3px 6px;
+}
+
 .score-row {
   display: flex;
   flex-wrap: wrap;

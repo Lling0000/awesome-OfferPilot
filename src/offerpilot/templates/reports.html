@@ -11,6 +11,38 @@
     <h2>Summary</h2>
     <pre class="markdown">{{ report.summary_md }}</pre>
   </div>
+  <div class="panel wide">
+    <h2>Claim Evidence</h2>
+    {% for section in claim_sections %}
+      <div class="claim-section">
+        <h3>{{ section.title }}</h3>
+        {% for claim in section.claims %}
+          <div class="claim-card">
+            <strong>{{ claim.claim }}</strong>
+            <span>{{ claim.confidence }} confidence · {{ claim.status }}</span>
+            <div class="source-id-row">
+              {% for source_id in claim.sourceIds %}
+                <code>{{ source_id }}</code>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+        {% for item in section.unknowns %}
+          <div class="claim-card muted-card">
+            <strong>{{ item.unknown }}</strong>
+            <span>{{ item.reason }}</span>
+            <div class="source-id-row">
+              {% for source_id in item.sourceIds %}
+                <code>{{ source_id }}</code>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty">No claim evidence yet.</p>
+    {% endfor %}
+  </div>
   <div class="panel">
     <h2>Source URLs</h2>
     {% for url in report.source_urls_json %}
@@ -28,6 +60,7 @@
             <span>
               {{ item.source_type }} · {{ item.publisher or raw.get("display_domain") or "unknown domain" }}
             </span>
+            <code class="evidence-id">{{ item.id }}</code>
           </div>
           <span class="quality-pill">{{ raw.get("quality_label", "unknown") }}</span>
         </div>

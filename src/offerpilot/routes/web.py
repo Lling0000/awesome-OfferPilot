@@ -21,6 +21,7 @@ from offerpilot.intelligence import (
 )
 from offerpilot.interviews import InterviewIntakeError, run_interview_intake
 from offerpilot.models import AgentRun, Application, Interview, Reminder, SearchReport
+from offerpilot.reports import build_claim_sections
 
 router = APIRouter()
 templates = Jinja2Templates(directory=Path(__file__).resolve().parents[1] / "templates")
@@ -211,10 +212,15 @@ def report_detail(request: Request, report_id: str):
     with session_scope() as session:
         report = session.get(SearchReport, report_id)
         evidence_items = list(report.evidence_items) if report else []
+        claim_sections = build_claim_sections(evidence_items) if report else []
         return templates.TemplateResponse(
             request,
             "reports.html",
-            {"report": report, "evidence_items": evidence_items},
+            {
+                "report": report,
+                "evidence_items": evidence_items,
+                "claim_sections": claim_sections,
+            },
         )
 
 

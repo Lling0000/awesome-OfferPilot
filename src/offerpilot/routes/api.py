@@ -24,7 +24,7 @@ from offerpilot.intelligence import (
 from offerpilot.interviews import InterviewIntakeError, run_interview_intake
 from offerpilot.models import AgentRun, Application, Interview, JobLink, Reminder, SearchReport
 from offerpilot.reminders import build_daily_reminders
-from offerpilot.reports import ReportValidationError, create_search_report
+from offerpilot.reports import ReportValidationError, build_claim_sections, create_search_report
 
 router = APIRouter()
 
@@ -328,10 +328,13 @@ def get_search_report(report_id: str) -> dict:
             "query": report.query,
             "summary_md": report.summary_md,
             "sourceUrls": report.source_urls_json,
+            "claimSections": build_claim_sections(report.evidence_items),
             "evidence": [
                 {
+                    "id": item.id,
                     "title": item.title,
                     "url": item.url,
+                    "canonical_url": item.canonical_url,
                     "source_type": item.source_type,
                     "publisher": item.publisher,
                     "display_domain": (item.raw_json or {}).get("display_domain"),

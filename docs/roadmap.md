@@ -13,6 +13,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Pasted JD parser fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
 - Report evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
+- Report claim sections cite stored evidence item IDs with `sourceIds`; weak or stale evidence becomes `unknowns`, not confident recommendations.
 - Source URL validation lives in `src/offerpilot/reports.py`.
 - Interview-note fixtures and audio-upload metadata fixtures live in `examples/interview-notes/`.
 - Interview transcripts are private user context and are not `sourceUrls`.
@@ -27,7 +28,6 @@ The initial good-first queue has been implemented. Current contributor-friendly 
 
 - [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
 - [#7 Add fail-closed transcription provider skeleton](https://github.com/Lling0000/awesome-OfferPilot/issues/7)
-- [#8 Add claim-level sourceIds to reports](https://github.com/Lling0000/awesome-OfferPilot/issues/8)
 
 ## Larger Tracks
 

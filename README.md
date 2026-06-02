@@ -150,6 +150,8 @@ A completed report must contain at least one valid `http://` or `https://` URL. 
 
 Each `EvidenceItem` should carry relevance, freshness, and credibility scores. The report page should expose those scores next to the source title, domain, source type, retrieval date, and quality label so users can tell whether a claim comes from an official current source, an older background source, or a weak signal that needs caution.
 
+Reports also expose deterministic `claimSections` in the API and UI. Supported claims reference stored `EvidenceItem.id` values through `sourceIds`, while weak or stale sources are surfaced as `unknowns` instead of confident recommendations.
+
 Content without links should be labeled as JD inference or internal history, not public evidence.
 
 ## Analyze A Job Link
@@ -195,6 +197,7 @@ Current baseline:
 - A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
+- Report claim sections cite stored evidence item IDs with `sourceIds`, and weak sources become `unknowns`.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
 - Fictional interview-note and audio-metadata fixtures test transcripts as private user context, not public evidence.
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
@@ -204,7 +207,6 @@ Next contributor-friendly slices:
 
 - [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
 - [#7 Add fail-closed transcription provider skeleton](https://github.com/Lling0000/awesome-OfferPilot/issues/7)
-- [#8 Add claim-level sourceIds to reports](https://github.com/Lling0000/awesome-OfferPilot/issues/8)
 
 ## 中文说明
 

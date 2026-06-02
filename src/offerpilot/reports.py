@@ -29,6 +29,113 @@ def validate_source_urls(source_urls: Iterable[str]) -> List[str]:
     return normalized
 
 
+def build_claim_sections(evidence_items: Iterable[EvidenceItem]) -> list[dict]:
+    """Build deterministic claim sections that reference stored evidence IDs."""
+    items = _rank_evidence_items(evidence_items)
+    supported = [item for item in items if _quality_label(item) in {"excellent", "strong"}]
+    supported_ids = {item.id for item in supported}
+    needs_verification = [item for item in items if item.id not in supported_ids]
+
+    claims = []
+    if supported:
+        top = supported[0]
+        claims.append(
+            {
+                "id": "claim_public_evidence_001",
+                "claim": (
+                    f"{_source_title(top)} is strong enough to support normal report claims."
+                ),
+                "sourceIds": [top.id],
+                "confidence": "high" if _quality_label(top) == "excellent" else "medium",
+                "status": "supported",
+            }
+        )
+    if len(supported) >= 2:
+        claims.append(
+            {
+                "id": "claim_corrob_001",
+                "claim": (
+                    "Multiple source-backed records can be used together for preparation "
+                    "priorities."
+                ),
+                "sourceIds": [item.id for item in supported[:2]],
+                "confidence": "medium",
+                "status": "supported",
+            }
+        )
+
+    unknowns = [
+        {
+            "id": f"unknown_evidence_{index:03d}",
+            "unknown": (
+                f"Verify {_source_title(item)} with stronger or newer evidence before treating "
+                "it as current interview-process guidance."
+            ),
+            "sourceIds": [item.id],
+            "reason": _usage_guidance(item),
+            "status": "needs_verification",
+        }
+        for index, item in enumerate(needs_verification[:3], start=1)
+    ]
+
+    if not items:
+        unknowns.append(
+            {
+                "id": "unknown_no_evidence",
+                "unknown": "No stored evidence item can support report claims yet.",
+                "sourceIds": [],
+                "reason": "A completed report needs public evidence before confident claims.",
+                "status": "needs_evidence",
+            }
+        )
+
+    return [
+        {
+            "id": "public-evidence",
+            "title": "Public Evidence",
+            "claims": claims,
+            "unknowns": unknowns,
+        }
+    ]
+
+
+def _rank_evidence_items(evidence_items: Iterable[EvidenceItem]) -> list[EvidenceItem]:
+    return sorted(
+        list(evidence_items),
+        key=lambda item: (
+            _raw_score(item, "overall_score"),
+            item.credibility_score or 0,
+            item.freshness_score or 0,
+            item.relevance_score or 0,
+            item.id or "",
+        ),
+        reverse=True,
+    )
+
+
+def _raw_score(item: EvidenceItem, key: str) -> float:
+    value = (item.raw_json or {}).get(key)
+    try:
+        return float(value or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _quality_label(item: EvidenceItem) -> str:
+    return str((item.raw_json or {}).get("quality_label") or "unknown")
+
+
+def _source_title(item: EvidenceItem) -> str:
+    return item.title or (item.raw_json or {}).get("display_domain") or item.url
+
+
+def _usage_guidance(item: EvidenceItem) -> str:
+    return str(
+        (item.raw_json or {}).get("usage_guidance")
+        or "Review this source before using it for confident claims."
+    )
+
+
 def create_search_report(
     session: Session,
     user_id: str,
@@ -80,4 +187,5 @@ def create_search_report(
                 raw_json=item,
             )
         )
+    session.flush()
     return report
