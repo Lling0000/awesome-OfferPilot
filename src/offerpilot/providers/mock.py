@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Iterable
+from urllib.parse import urlparse
 
 from offerpilot.providers.search_sources import LocalFixtureSearchSource, SearchSource
 from offerpilot.search import build_query_plan, extract_skill_terms, normalize_evidence_items
@@ -7,18 +8,25 @@ from offerpilot.search import build_query_plan, extract_skill_terms, normalize_e
 
 class MockJobLinkParser:
     def parse(self, url: str) -> dict:
+        fixture = _job_link_fixture(url)
+        if fixture:
+            return fixture
+
         platform = "boss" if "zhipin" in url or "boss" in url else "company_site"
+        jd_text = (
+            "Build Python services for interview scheduling, candidate analytics, "
+            "and evidence-backed job recommendations. Familiarity with FastAPI, "
+            "SQL, Redis, and async workflows is preferred."
+        )
         return {
             "platform": platform,
+            "source_type": "boss_job_link" if platform == "boss" else "company_site",
             "company_name": "Example Robotics",
             "job_title": "Backend Engineer Intern",
             "city": "Shanghai",
-            "jd_text": (
-                "Build Python services for interview scheduling, candidate analytics, "
-                "and evidence-backed job recommendations. Familiarity with FastAPI, "
-                "SQL, Redis, and async workflows is preferred."
-            ),
+            "jd_text": jd_text,
             "skills": ["Python", "FastAPI", "SQL", "Redis", "async workflows"],
+            "public_evidence": False,
             "parsed_at": datetime.utcnow().isoformat(),
         }
 
@@ -136,6 +144,63 @@ class MockProviderBundle:
         self.search_provider = MockSearchProvider()
         self.transcription_provider = MockTranscriptionProvider()
         self.interview_analyzer = MockInterviewAnalyzer()
+
+
+def _job_link_fixture(url: str) -> dict:
+    parsed_url = urlparse(url.strip())
+    host = parsed_url.netloc.lower()
+    path = parsed_url.path.lower().rstrip("/")
+
+    if host == "careers.example-retail.test" and path == "/jobs/frontend-growth-intern":
+        return _parsed_job_link_fixture(
+            platform="company_careers",
+            source_type="company_careers_page",
+            company_name="Example Retail",
+            job_title="Frontend Growth Intern",
+            city="Hangzhou",
+            jd_text=(
+                "Official careers page for a frontend growth intern. Build React and "
+                "TypeScript experiments, use JavaScript and Vue for storefront modules, "
+                "and collaborate with Node.js services on A/B Testing workflows."
+            ),
+        )
+
+    if host == "jobs.example-mirror.test" and path == "/mirrors/example-finance-data-intern":
+        return _parsed_job_link_fixture(
+            platform="mirrored_job_board",
+            source_type="mirrored_job_board",
+            company_name="Example Finance",
+            job_title="Data Analytics Intern",
+            city="Shenzhen",
+            jd_text=(
+                "Mirrored job-board listing for a data analytics intern. Analyze SQL "
+                "datasets with Python and Pandas, maintain Airflow reporting tasks, "
+                "and prepare Tableau dashboards for hiring operations."
+            ),
+        )
+
+    return {}
+
+
+def _parsed_job_link_fixture(
+    platform: str,
+    source_type: str,
+    company_name: str,
+    job_title: str,
+    city: str,
+    jd_text: str,
+) -> dict:
+    return {
+        "platform": platform,
+        "source_type": source_type,
+        "company_name": company_name,
+        "job_title": job_title,
+        "city": city,
+        "jd_text": jd_text,
+        "skills": extract_skill_terms(jd_text),
+        "public_evidence": False,
+        "parsed_at": datetime.utcnow().isoformat(),
+    }
 
 
 def _prefixed_value(text: str, labels: tuple[str, ...]) -> str:

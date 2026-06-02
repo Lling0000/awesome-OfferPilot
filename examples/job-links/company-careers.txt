@@ -1,0 +1,13 @@
+# OfferPilot sample company career-page inputs
+#
+# These links are deterministic fixtures for parser and workflow examples.
+# They are fictional and do not describe real jobs.
+
+https://careers.example-retail.test/jobs/frontend-growth-intern
+https://jobs.example-mirror.test/mirrors/example-finance-data-intern
+
+# Expected behavior:
+# 1. Parse company, role, city, platform, source_type, JD text, and skills.
+# 2. Treat the parsed page as lead context, not public evidence.
+# 3. Run forced search before generating a completed report.
+# 4. Return a report with external top-level sourceUrls.

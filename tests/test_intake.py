@@ -17,6 +17,7 @@ from offerpilot.models import AgentRun, Application, EvidenceItem, JobLink, Resu
 from offerpilot.providers import MockProviderBundle
 
 JD_FIXTURE_DIR = Path(__file__).resolve().parents[1] / "examples" / "job-descriptions"
+JOB_LINK_FIXTURE_DIR = Path(__file__).resolve().parents[1] / "examples" / "job-links"
 
 PASTED_JD = """Company: Example Analytics
 Role: Backend Platform Intern
@@ -61,6 +62,36 @@ def test_run_job_link_intake_creates_source_backed_flow(tmp_path) -> None:
     assert app_record.company_name == "Example Robotics"
     assert report.source_urls_json
     assert evidence
+
+
+def test_run_company_career_link_intake_creates_source_backed_flow(tmp_path) -> None:
+    db_url = f"sqlite:///{tmp_path}/offerpilot.db"
+    reset_db(db_url)
+
+    with session_scope(db_url) as session:
+        user = ensure_demo_user(session)
+        result = run_job_link_intake(
+            session,
+            user,
+            "https://careers.example-retail.test/jobs/frontend-growth-intern",
+        )
+
+    with session_scope(db_url) as session:
+        app_record = session.get(Application, result["application_id"])
+        job_source = session.get(JobLink, result["job_link_id"])
+        report = session.get(SearchReport, result["search_report_id"])
+
+    assert app_record.company_name == "Example Retail"
+    assert app_record.job_title == "Frontend Growth Intern"
+    assert app_record.city == "Hangzhou"
+    assert app_record.channel == "company_careers"
+    assert job_source.parsed_payload["source_type"] == "company_careers_page"
+    assert job_source.parsed_payload["public_evidence"] is False
+    assert {"React", "TypeScript", "A/B Testing"}.issubset(
+        set(job_source.parsed_payload["skills"])
+    )
+    assert report.source_urls_json
+    assert all(url.startswith("https://") for url in report.source_urls_json)
 
 
 def test_run_job_link_intake_can_use_explicit_resume(tmp_path) -> None:
@@ -180,6 +211,44 @@ def test_pasted_jd_parser_fixtures_cover_multiple_role_families() -> None:
 
     for fixture_name, company, role, city, expected_skills in cases:
         parsed = parser.parse_text((JD_FIXTURE_DIR / fixture_name).read_text(encoding="utf-8"))
+        assert parsed["company_name"] == company
+        assert parsed["job_title"] == role
+        assert parsed["city"] == city
+        assert expected_skills.issubset(set(parsed["skills"]))
+        assert parsed["public_evidence"] is False
+
+
+def test_job_link_parser_fixtures_cover_company_careers_and_mirrors() -> None:
+    parser = MockProviderBundle().job_link_parser
+    fixture_text = (JOB_LINK_FIXTURE_DIR / "company-careers.txt").read_text(encoding="utf-8")
+    assert "careers.example-retail.test" in fixture_text
+    assert "jobs.example-mirror.test" in fixture_text
+
+    cases = [
+        (
+            "https://careers.example-retail.test/jobs/frontend-growth-intern",
+            "company_careers",
+            "company_careers_page",
+            "Example Retail",
+            "Frontend Growth Intern",
+            "Hangzhou",
+            {"React", "TypeScript", "JavaScript", "Vue", "Node.js", "A/B Testing"},
+        ),
+        (
+            "https://jobs.example-mirror.test/mirrors/example-finance-data-intern",
+            "mirrored_job_board",
+            "mirrored_job_board",
+            "Example Finance",
+            "Data Analytics Intern",
+            "Shenzhen",
+            {"Python", "SQL", "Pandas", "Airflow", "Tableau"},
+        ),
+    ]
+
+    for url, platform, source_type, company, role, city, expected_skills in cases:
+        parsed = parser.parse(url)
+        assert parsed["platform"] == platform
+        assert parsed["source_type"] == source_type
         assert parsed["company_name"] == company
         assert parsed["job_title"] == role
         assert parsed["city"] == city

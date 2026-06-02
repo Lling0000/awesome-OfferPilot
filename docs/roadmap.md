@@ -10,6 +10,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - The external search API skeleton fails closed until credentials, endpoint, and transport are configured.
 - The external transcription provider skeleton fails closed until credentials, endpoint, and transport are configured.
 - Job intake handles URLs and pasted JD text through the same source-backed report path.
+- Company career-page and mirrored job-board fixtures exercise non-Boss job-link parsing.
 - Pasted JD text is private user context and must not be counted as public evidence.
 - Pasted JD parser fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
@@ -25,9 +26,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 ## Good First Issues
 
-The initial good-first queue has been implemented. Current contributor-friendly issues:
-
-- [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
+The current good-first queue has been implemented. New contributor-friendly issues should be opened from the larger tracks below, with deterministic fixtures and privacy boundaries before any live provider claim.
 
 ## Larger Tracks
 

@@ -58,6 +58,8 @@ STRICT_FILES = [
     "examples/interview-notes/phone-screen.md",
     "examples/interview-notes/technical-round.md",
     "examples/interview-notes/audio-upload-metadata.json",
+    "examples/job-links/boss-zhipin.txt",
+    "examples/job-links/company-careers.txt",
     "examples/job-descriptions/backend-platform-jd.txt",
     "examples/job-descriptions/frontend-growth-jd.txt",
     "examples/job-descriptions/data-analytics-jd.txt",

@@ -8,7 +8,7 @@ The guiding rule is simple: adapters collect and structure facts; they do not pr
 
 | Adapter | Current default | Production direction | Contract boundary |
 | --- | --- | --- | --- |
-| `JobLinkParser` | `MockJobLinkParser` | Boss Zhipin-style links, company career pages, LinkedIn-style links, pasted JD text | Parse user input into company, role, location, JD text, skills, canonical URL, and confidence. |
+| `JobLinkParser` | `MockJobLinkParser` | Boss Zhipin-style links, company career pages, mirrored job-board links, LinkedIn-style links, pasted JD text | Parse user input into company, role, location, JD text, skills, canonical URL, and confidence. |
 | `SearchProvider` | `MockSearchProvider` | Search API orchestration, site-specific search, forum/social retrieval | Execute the query plan and return raw source candidates plus retrieval coverage. |
 | `SearchSource` | `LocalFixtureSearchSource` | Official-site crawler, forum adapter, social-search adapter, commercial SERP API adapter | Return raw candidates for one query-plan item. |
 | `TranscriptionProvider` | `MockTranscriptionProvider` | Local or hosted speech-to-text | Turn voice notes or interview recordings into reviewable transcript text. |
@@ -27,7 +27,7 @@ Start from the thing you know how to retrieve or structure:
 | Add voice or transcription | `TranscriptionProvider` | Convert a local voice note or interview recording into transcript text with confidence and quality notes. |
 | Improve report writing | `InterviewAnalyzer` | Produce summaries and next actions that cite existing evidence IDs and top-level `sourceUrls`. |
 
-Hiring-platform parsing is valuable, but parsing is not evidence. A Boss Zhipin-style parser can extract role title, company, location, JD text, visible salary range, and canonical URL when allowed, but interview claims, company facts, and hiring-manager details still need forced search and source URLs.
+Hiring-platform parsing is valuable, but parsing is not evidence. A Boss Zhipin-style parser, company-careers parser, or mirrored-job-board parser can extract role title, company, location, JD text, visible salary range, and canonical URL when allowed, but interview claims, company facts, and hiring-manager details still need forced search and source URLs.
 
 Voice and transcription adapters should treat transcripts as private user context. A transcript can help generate prep notes, but it is not public evidence and should not be packaged as a `sourceUrls` citation.
 
@@ -188,7 +188,7 @@ The example intentionally avoids network calls. It proves the plugin shape, retu
 
 Good first adapter contributions are small and inspectable:
 
-- A company-careers-page `JobLinkParser` for pasted official job URLs.
+- Additional job-link parser fixtures for official careers pages, mirrored job-board pages, and platform-specific shared links.
 - A Boss Zhipin-style parser that extracts stable public fields from shared links when available.
 - A `SearchSource` wrapper around a real search API that returns title, URL, snippet, publisher, date, and query IDs.
 - A forum or community source that can retrieve interview-report links while respecting platform terms.

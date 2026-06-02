@@ -195,6 +195,7 @@ Current baseline:
 
 - Deterministic local adapters for parser, pasted JD intake, search, transcription, and analysis flows.
 - Job intake handles Boss-style URLs and pasted JD text through the same source-backed report path.
+- Company career-page and mirrored job-board fixtures exercise non-Boss job-link parsing.
 - Pasted JD fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
@@ -206,9 +207,7 @@ Current baseline:
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
 - Strict publish checks that require evidence docs, examples, license, and `sourceUrls` validation.
 
-Next contributor-friendly slices:
-
-- [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
+The current contributor-friendly issue queue has been implemented. New issues should be opened as small fixture-backed slices from the larger tracks in the roadmap.
 
 ## 中文说明
 
