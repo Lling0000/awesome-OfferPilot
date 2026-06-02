@@ -102,6 +102,7 @@ class MockTranscriptionProvider:
             "file_path": file_path,
             "provider": "mock-transcription",
             "privacy": "private_user_context",
+            "sourceUrls": [],
             "transcript": (
                 "The interviewer asked about backend projects, SQL indexes, "
                 "and how I would prepare for the next round."

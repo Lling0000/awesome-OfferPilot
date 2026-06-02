@@ -126,6 +126,42 @@ Candidates without a URL are dropped. OfferPilot never invents URLs to keep a re
 
 When the provider does not expose a reliable candidate `source_type`, leave it unset and let the evidence normalizer infer the type from the URL.
 
+## External Transcription Provider Skeleton
+
+`ExternalTranscriptionProvider` is the starter class for real speech-to-text providers. It does not read audio bytes or call a provider by itself. It checks setup, sends a minimal private-context payload to an injected `transport`, and normalizes the provider response into transcript text.
+
+Required environment variables:
+
+| Variable | Meaning |
+| --- | --- |
+| `TRANSCRIPTION_PROVIDER_API_KEY` | Credential used by the transcription transport. Missing values raise `TranscriptionProviderNotConfigured`. |
+| `TRANSCRIPTION_PROVIDER_ENDPOINT` | Provider endpoint URL. Missing values raise `TranscriptionProviderNotConfigured`. |
+
+Minimal shape:
+
+```python
+from offerpilot.providers import ExternalTranscriptionProvider
+
+
+def transport(endpoint: str, payload: dict, headers: dict) -> dict:
+    # Replace this with a provider SDK or HTTP request.
+    return {"transcript": "The interviewer asked about SQL indexes.", "confidence": 0.86}
+
+
+provider = ExternalTranscriptionProvider(transport=transport)
+result = provider.transcribe("interview.m4a")
+```
+
+The normalized result always includes:
+
+- `privacy: "private_user_context"`
+- `sourceUrls: []`
+- `provider`
+- `file_path`
+- `transcript`
+
+Provider-returned `sourceUrls` are discarded. Interview transcripts can help summarize a user's own interview, but they are not public evidence and must not be cited as report sources.
+
 ## Minimal Example
 
 The runnable example in `examples/search-source-plugin` shows a tiny source that searches an in-memory dataset:
@@ -144,6 +180,7 @@ The example intentionally avoids network calls. It proves the plugin shape, retu
 - Include stable URLs and avoid sources that cannot be linked.
 - Include `published_at` only when it comes from the source or provider metadata.
 - Raise `SearchSourceNotConfigured` when credentials, network access, or required setup are missing.
+- Raise `TranscriptionProviderNotConfigured` when speech-to-text credentials, endpoint, or transport setup are missing.
 - Add a deterministic fixture or mocked test so CI can validate the adapter without live internet access.
 - Keep external provider-specific fields under clear names if they are useful for debugging, but do not make the core report depend on one vendor.
 

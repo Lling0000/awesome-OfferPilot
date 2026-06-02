@@ -142,6 +142,8 @@ The adapters should keep the product honest: parsing is separate from query plan
 
 External search sources fail closed by default. A source that is not configured should raise a clear setup error rather than returning an unsourced report. The built-in `ExternalSearchAPISource` skeleton requires `SEARCH_PROVIDER_API_KEY`, `SEARCH_PROVIDER_ENDPOINT`, and an injected transport before it can return anything.
 
+External transcription follows the same rule. `ExternalTranscriptionProvider` requires `TRANSCRIPTION_PROVIDER_API_KEY`, `TRANSCRIPTION_PROVIDER_ENDPOINT`, and an injected transport. Normalized transcripts are marked `private_user_context` and keep `sourceUrls: []`.
+
 See [docs/adapters.md](docs/adapters.md) for the adapter implementation checklist and [examples/search-source-plugin](examples/search-source-plugin) for a minimal `SearchSource` that works with `MockSearchProvider(sources=[...])`.
 
 ## Source-Backed Reports
@@ -196,6 +198,7 @@ Current baseline:
 - Pasted JD fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
+- A fail-closed `ExternalTranscriptionProvider` skeleton for speech-to-text work that keeps transcripts private.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Report claim sections cite stored evidence item IDs with `sourceIds`, and weak sources become `unknowns`.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
@@ -206,7 +209,6 @@ Current baseline:
 Next contributor-friendly slices:
 
 - [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
-- [#7 Add fail-closed transcription provider skeleton](https://github.com/Lling0000/awesome-OfferPilot/issues/7)
 
 ## 中文说明
 

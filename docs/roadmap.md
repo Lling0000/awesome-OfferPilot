@@ -8,6 +8,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Mock provider boundaries live in `src/offerpilot/providers/mock.py`.
 - Search source contracts live in `src/offerpilot/providers/search_sources.py` and `docs/adapters.md`.
 - The external search API skeleton fails closed until credentials, endpoint, and transport are configured.
+- The external transcription provider skeleton fails closed until credentials, endpoint, and transport are configured.
 - Job intake handles URLs and pasted JD text through the same source-backed report path.
 - Pasted JD text is private user context and must not be counted as public evidence.
 - Pasted JD parser fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
@@ -27,7 +28,6 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 The initial good-first queue has been implemented. Current contributor-friendly issues:
 
 - [#6 Add company career page parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/6)
-- [#7 Add fail-closed transcription provider skeleton](https://github.com/Lling0000/awesome-OfferPilot/issues/7)
 
 ## Larger Tracks
 

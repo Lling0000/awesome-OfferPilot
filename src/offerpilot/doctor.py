@@ -251,16 +251,20 @@ STRICT_CONTENT_REQUIREMENTS = {
                 "SEARCH_PROVIDER_API_KEY=",
                 "SEARCH_PROVIDER_ENDPOINT=",
                 "TRANSCRIPTION_PROVIDER_API_KEY=",
+                "TRANSCRIPTION_PROVIDER_ENDPOINT=",
             ),
         ),
     ],
     "docs/adapters.md": [
         ContentRequirement(
-            "external search skeleton",
+            "external provider skeletons",
             (
                 "ExternalSearchAPISource",
                 "SEARCH_PROVIDER_API_KEY",
                 "SEARCH_PROVIDER_ENDPOINT",
+                "ExternalTranscriptionProvider",
+                "TRANSCRIPTION_PROVIDER_API_KEY",
+                "TRANSCRIPTION_PROVIDER_ENDPOINT",
             ),
         ),
     ],

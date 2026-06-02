@@ -1,11 +1,17 @@
 import json
 from pathlib import Path
 
+import pytest
 from sqlalchemy import select
 
 from offerpilot.db import ensure_demo_user, reset_db, session_scope
 from offerpilot.interviews import InterviewIntakeError, run_interview_intake
 from offerpilot.models import AgentRun, Application, Interview, SearchReport
+from offerpilot.providers import (
+    ExternalTranscriptionProvider,
+    TranscriptionProviderNotConfigured,
+    TranscriptionProviderResponseError,
+)
 
 FIXTURE_DIR = Path(__file__).resolve().parents[1] / "examples" / "interview-notes"
 
@@ -77,6 +83,7 @@ def test_interview_intake_combines_audio_transcript_and_notes(tmp_path) -> None:
     assert interview.summary_json["transcription"]["file_path"] == "interview.m4a"
     assert interview.summary_json["transcription"]["provider"] == "mock-transcription"
     assert interview.summary_json["transcription"]["privacy"] == "private_user_context"
+    assert interview.summary_json["transcription"]["sourceUrls"] == []
     assert interview.summary_json["audio_file_name"] == "interview.m4a"
 
 
@@ -219,3 +226,77 @@ def test_interview_audio_fixture_metadata_drives_uploaded_artifact_path(tmp_path
     assert interview.summary_json["transcription"]["file_path"] == "example-technical-round.m4a"
     assert interview.summary_json["transcription"]["provider"] == "mock-transcription"
     assert interview.summary_json["privacy"]["transcript_private"] is True
+
+
+def test_external_transcription_provider_fails_closed_without_credentials(monkeypatch) -> None:
+    monkeypatch.delenv("TRANSCRIPTION_PROVIDER_API_KEY", raising=False)
+    monkeypatch.delenv("TRANSCRIPTION_PROVIDER_ENDPOINT", raising=False)
+
+    provider = ExternalTranscriptionProvider()
+
+    with pytest.raises(TranscriptionProviderNotConfigured, match="TRANSCRIPTION_PROVIDER_API_KEY"):
+        provider.transcribe("interview.m4a")
+
+
+def test_external_transcription_provider_requires_endpoint(monkeypatch) -> None:
+    monkeypatch.setenv("TRANSCRIPTION_PROVIDER_API_KEY", "test-key")
+    monkeypatch.delenv("TRANSCRIPTION_PROVIDER_ENDPOINT", raising=False)
+
+    provider = ExternalTranscriptionProvider()
+
+    with pytest.raises(TranscriptionProviderNotConfigured, match="TRANSCRIPTION_PROVIDER_ENDPOINT"):
+        provider.transcribe("interview.m4a")
+
+
+def test_external_transcription_provider_requires_transport(monkeypatch) -> None:
+    monkeypatch.setenv("TRANSCRIPTION_PROVIDER_API_KEY", "test-key")
+    monkeypatch.setenv("TRANSCRIPTION_PROVIDER_ENDPOINT", "https://stt.example.test/api")
+
+    provider = ExternalTranscriptionProvider()
+
+    with pytest.raises(TranscriptionProviderNotConfigured, match="no transport configured"):
+        provider.transcribe("interview.m4a")
+
+
+def test_external_transcription_provider_marks_transcript_private() -> None:
+    captured = {}
+
+    def transport(endpoint: str, payload: dict, headers: dict) -> dict:
+        captured["endpoint"] = endpoint
+        captured["payload"] = payload
+        captured["headers"] = headers
+        return {
+            "transcript": "The interviewer asked about project depth and SQL indexes.",
+            "confidence": "0.86",
+            "language": "en",
+            "sourceUrls": ["https://example.com/should-not-survive"],
+        }
+
+    provider = ExternalTranscriptionProvider(
+        api_key="test-key",
+        endpoint="https://stt.example.test/api",
+        transport=transport,
+    )
+
+    result = provider.transcribe("interview.m4a")
+
+    assert captured["endpoint"] == "https://stt.example.test/api"
+    assert captured["payload"]["privacy"] == "private_user_context"
+    assert captured["payload"]["sourceUrls"] == []
+    assert captured["headers"]["Authorization"] == "Bearer test-key"
+    assert result["transcript"].startswith("The interviewer asked")
+    assert result["privacy"] == "private_user_context"
+    assert result["sourceUrls"] == []
+    assert result["confidence"] == 0.86
+    assert result["language"] == "en"
+
+
+def test_external_transcription_provider_rejects_empty_transcripts() -> None:
+    provider = ExternalTranscriptionProvider(
+        api_key="test-key",
+        endpoint="https://stt.example.test/api",
+        transport=lambda endpoint, payload, headers: {"transcript": ""},
+    )
+
+    with pytest.raises(TranscriptionProviderResponseError, match="no transcript text"):
+        provider.transcribe("interview.m4a")

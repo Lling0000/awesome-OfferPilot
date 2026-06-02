@@ -32,6 +32,8 @@ Text input may contain recruiter messages, private notes, or pasted job descript
 
 Voice input should be stored only when needed. If speech-to-text is enough, users should be able to keep the transcript and discard the raw recording.
 
+Speech-to-text adapters must mark transcript output as `private_user_context`. The external transcription skeleton requires `TRANSCRIPTION_PROVIDER_API_KEY`, `TRANSCRIPTION_PROVIDER_ENDPOINT`, and an injected transport before it can return anything. Missing setup must fail closed instead of returning fake transcript text.
+
 ### Files
 
 Files may include resumes, PDFs, screenshots, and offer letters. Store original files separately from extracted text, and mark them as user-private by default.
@@ -114,6 +116,8 @@ Interview-note fixtures may be committed only when they are fictional and clearl
 Uploaded audio fixtures should use metadata-only examples such as `examples/interview-notes/audio-upload-metadata.json`. Do not commit real recordings. A metadata fixture can include a pretend file name, content type, duration, stage, company, and role, but the recording itself must remain absent.
 
 Interview transcripts, typed notes, and audio-derived text are not public evidence. They must not appear in `sourceUrls`, and they should not be sent to search providers by default.
+
+Provider-returned transcript metadata should keep `sourceUrls: []`. A transcript can support a private interview summary and next-focus list, but public report claims still need external evidence URLs.
 
 ## Security Relationship
 

@@ -11,9 +11,17 @@ from offerpilot.providers.search_sources import (
     SearchSourceNotConfigured,
     UnconfiguredExternalSearchSource,
 )
+from offerpilot.providers.transcription import (
+    ExternalTranscriptionProvider,
+    TranscriptionProviderError,
+    TranscriptionProviderNotConfigured,
+    TranscriptionProviderResponseError,
+    UnconfiguredExternalTranscriptionProvider,
+)
 
 __all__ = [
     "ExternalSearchAPISource",
+    "ExternalTranscriptionProvider",
     "LocalFixtureSearchSource",
     "MockInterviewAnalyzer",
     "MockJobLinkParser",
@@ -21,5 +29,9 @@ __all__ = [
     "MockSearchProvider",
     "MockTranscriptionProvider",
     "SearchSourceNotConfigured",
+    "TranscriptionProviderError",
+    "TranscriptionProviderNotConfigured",
+    "TranscriptionProviderResponseError",
     "UnconfiguredExternalSearchSource",
+    "UnconfiguredExternalTranscriptionProvider",
 ]
