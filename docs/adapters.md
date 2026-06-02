@@ -162,6 +162,12 @@ The normalized result always includes:
 
 Provider-returned `sourceUrls` are discarded. Interview transcripts can help summarize a user's own interview, but they are not public evidence and must not be cited as report sources.
 
+## Interview Note Fixture Contract
+
+Interview-note fixture metadata lives in `examples/interview-notes/interview-notes.jsonl`. Each row references a markdown `file_path`, `input_type: "typed_interview_note"`, `source_type: "interview_note"`, stage, expected question keywords or count, `privacy: "private_user_context"`, `public_evidence=false`, and `sourceUrls: []`.
+
+Typed interview notes and transcripts can support private summaries, extracted questions, and next-focus lists. They must never satisfy completed-report `sourceUrls`; source-backed public claims still need external evidence URLs.
+
 ## Minimal Examples
 
 The runnable example in `examples/search-source-plugin` shows a tiny source that searches an in-memory dataset:

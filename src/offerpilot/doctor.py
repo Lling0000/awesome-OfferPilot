@@ -55,6 +55,7 @@ STRICT_FILES = [
     "examples/reports/job-report-with-sourceUrls.json",
     "examples/reports/daily-intelligence-with-sourceUrls.json",
     "examples/interview-notes/README.md",
+    "examples/interview-notes/interview-notes.jsonl",
     "examples/interview-notes/phone-screen.md",
     "examples/interview-notes/technical-round.md",
     "examples/interview-notes/audio-upload-metadata.json",
@@ -278,6 +279,16 @@ STRICT_CONTENT_REQUIREMENTS = {
             ),
         ),
         ContentRequirement(
+            "interview note fixture contract",
+            (
+                "Interview Note Fixture Contract",
+                "interview-notes.jsonl",
+                "typed_interview_note",
+                "interview_note",
+                "sourceUrls: []",
+            ),
+        ),
+        ContentRequirement(
             "job-link parser fixture contract",
             (
                 "JobLinkParser Fixture Contract",
@@ -419,8 +430,22 @@ STRICT_CONTENT_REQUIREMENTS = {
             "safe interview fixture policy",
             (
                 "fictional and safe to commit",
+                "interview-notes.jsonl",
                 "metadata for a pretend uploaded audio file",
                 "Interview transcripts must not appear in `sourceUrls`",
+            ),
+        ),
+    ],
+    "examples/interview-notes/interview-notes.jsonl": [
+        ContentRequirement(
+            "structured interview-note fixture metadata",
+            (
+                '"privacy": "private_user_context"',
+                '"public_evidence": false',
+                '"sourceUrls": []',
+                '"expected_question_keywords"',
+                '"file_path": "examples/interview-notes/phone-screen.md"',
+                '"file_path": "examples/interview-notes/technical-round.md"',
             ),
         ),
     ],
@@ -439,6 +464,7 @@ STRICT_CONTENT_REQUIREMENTS = {
             "interview fixture privacy policy",
             (
                 "Interview Fixtures",
+                "interview-notes.jsonl",
                 "metadata-only examples",
                 "must not appear in `sourceUrls`",
             ),

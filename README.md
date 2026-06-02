@@ -205,13 +205,13 @@ Current baseline:
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Report claim sections cite stored evidence item IDs with `sourceIds`, link those IDs to evidence cards, and turn weak sources into `unknowns`.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
-- Fictional interview-note and audio-metadata fixtures test transcripts as private user context, not public evidence.
+- Fictional interview-note fixtures include JSONL metadata, and audio-metadata fixtures test transcripts as private user context, not public evidence.
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
 - Strict publish checks that require evidence docs, examples, license, and `sourceUrls` validation.
 
 Next contributor-friendly slices:
 
-- [#15 Add structured metadata for interview note fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/15)
+- [#16 Add reminder fixture metadata for daily follow-ups](https://github.com/Lling0000/awesome-OfferPilot/issues/16)
 
 ## 中文说明
 

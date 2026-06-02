@@ -6,6 +6,7 @@ Use these files as local demo inputs:
 
 - `phone-screen.md`: fictional recruiter screen notes.
 - `technical-round.md`: fictional technical interview notes.
+- `interview-notes.jsonl`: structured expectations for note fixtures, question keywords, privacy, and `sourceUrls: []`.
 - `audio-upload-metadata.json`: metadata for a pretend uploaded audio file; the audio file itself is intentionally absent.
 
 Privacy contract:

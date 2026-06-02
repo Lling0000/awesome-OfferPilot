@@ -34,6 +34,7 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "examples/search-source-plugin/example_source.py" in STRICT_FILES
     assert "examples/search-source-plugin/run_example.py" in STRICT_FILES
     assert "examples/interview-notes/README.md" in STRICT_FILES
+    assert "examples/interview-notes/interview-notes.jsonl" in STRICT_FILES
     assert "examples/interview-notes/phone-screen.md" in STRICT_FILES
     assert "examples/interview-notes/technical-round.md" in STRICT_FILES
     assert "examples/interview-notes/audio-upload-metadata.json" in STRICT_FILES
@@ -96,4 +97,9 @@ def test_strict_publish_rejects_placeholder_publish_files(tmp_path) -> None:
     assert (
         "structured pasted JD fixture metadata"
         in checks["content:examples/job-descriptions/pasted-jds.jsonl"].detail
+    )
+    assert not checks["content:examples/interview-notes/interview-notes.jsonl"].ok
+    assert (
+        "structured interview-note fixture metadata"
+        in checks["content:examples/interview-notes/interview-notes.jsonl"].detail
     )

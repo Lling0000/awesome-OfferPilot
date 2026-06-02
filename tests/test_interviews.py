@@ -13,7 +13,38 @@ from offerpilot.providers import (
     TranscriptionProviderResponseError,
 )
 
-FIXTURE_DIR = Path(__file__).resolve().parents[1] / "examples" / "interview-notes"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+FIXTURE_DIR = REPO_ROOT / "examples" / "interview-notes"
+
+
+def _interview_note_fixtures() -> list[dict]:
+    fixture_path = FIXTURE_DIR / "interview-notes.jsonl"
+    return [
+        json.loads(line)
+        for line in fixture_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
+def _interview_note_fixture(fixture_id: str) -> dict:
+    return next(
+        fixture for fixture in _interview_note_fixtures() if fixture["id"] == fixture_id
+    )
+
+
+def _question_lines(note_text: str) -> list[str]:
+    questions = []
+    in_questions = False
+    for raw_line in note_text.splitlines():
+        line = raw_line.strip()
+        if line == "## Questions Asked":
+            in_questions = True
+            continue
+        if in_questions and line.startswith("## "):
+            break
+        if in_questions and line.startswith("- "):
+            questions.append(line[2:])
+    return questions
 
 
 def test_interview_intake_creates_summary_from_typed_notes(tmp_path) -> None:
@@ -153,10 +184,34 @@ def test_interview_intake_persists_one_completed_record(tmp_path) -> None:
     assert interviews[0].summary_json["summary"]
 
 
+def test_interview_note_metadata_matches_fixture_files() -> None:
+    fixtures = _interview_note_fixtures()
+    assert fixtures
+    assert all(fixture["input_type"] == "typed_interview_note" for fixture in fixtures)
+    assert all(fixture["source_type"] == "interview_note" for fixture in fixtures)
+    assert all(fixture["privacy"] == "private_user_context" for fixture in fixtures)
+    assert all(fixture["public_evidence"] is False for fixture in fixtures)
+    assert all(fixture["sourceUrls"] == [] for fixture in fixtures)
+    assert all("sourceUrls" in fixture["completed_report_requirement"] for fixture in fixtures)
+
+    for fixture in fixtures:
+        note_text = (REPO_ROOT / fixture["file_path"]).read_text(encoding="utf-8")
+        questions = _question_lines(note_text)
+        question_text = " ".join(questions).lower()
+
+        assert "fictional" in note_text.lower()
+        assert len(questions) == fixture["expected_question_count"]
+        for keyword in fixture["expected_question_keywords"]:
+            assert keyword.lower() in question_text
+
+
 def test_interview_fixture_notes_are_safe_private_context(tmp_path) -> None:
-    fixture_text = (FIXTURE_DIR / "technical-round.md").read_text(encoding="utf-8")
+    fixture = _interview_note_fixture("interview-note/technical-round")
+    fixture_text = (REPO_ROOT / fixture["file_path"]).read_text(encoding="utf-8")
     assert "fictional sample data" in fixture_text
     assert "Must not be used as `sourceUrls`" in fixture_text
+    assert fixture["privacy"] == "private_user_context"
+    assert fixture["sourceUrls"] == []
 
     db_url = f"sqlite:///{tmp_path}/offerpilot.db"
     reset_db(db_url)
@@ -165,8 +220,8 @@ def test_interview_fixture_notes_are_safe_private_context(tmp_path) -> None:
         user = ensure_demo_user(session)
         app = Application(
             user_id=user.id,
-            company_name="Example Robotics",
-            job_title="Backend Engineer Intern",
+            company_name=fixture["company_name"],
+            job_title=fixture["job_title"],
         )
         session.add(app)
         session.flush()
@@ -174,7 +229,7 @@ def test_interview_fixture_notes_are_safe_private_context(tmp_path) -> None:
             session=session,
             user=user,
             application_id=app.id,
-            stage="technical",
+            stage=fixture["stage"],
             typed_note=fixture_text,
         )
 
@@ -184,6 +239,7 @@ def test_interview_fixture_notes_are_safe_private_context(tmp_path) -> None:
         reports = session.scalars(select(SearchReport)).all()
 
     assert "SQL index choices" in interview.transcript_text
+    assert interview.stage == fixture["stage"]
     assert interview.summary_json["typed_note_present"] is True
     assert interview.summary_json["privacy"]["public_evidence"] is False
     assert interview.summary_json["privacy"]["sourceUrls"] == []
