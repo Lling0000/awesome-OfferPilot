@@ -33,12 +33,17 @@ def test_example_search_source_returns_traceable_candidates() -> None:
         }
     )
 
-    assert results
-    assert results[0]["url"].startswith("https://")
-    assert validate_source_urls([results[0]["url"]])
-    assert results[0]["retrieved_by"] == "example-source"
-    assert results[0]["query_ids"] == ["company-role-interview"]
-    assert results[0]["source_type"] in {"forum", "official"}
+    assert len(results) >= 2
+    for item in results:
+        assert item["title"]
+        assert item["url"].startswith("https://")
+        assert item["snippet"]
+        assert item["publisher"]
+        assert item["published_at"]
+        assert validate_source_urls([item["url"]])
+        assert item["retrieved_by"] == "example-source"
+        assert item["query_ids"] == ["company-role-interview"]
+        assert item["source_type"] in {"forum", "official"}
 
 
 def test_example_candidates_can_be_normalized_and_scored() -> None:

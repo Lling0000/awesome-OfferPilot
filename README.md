@@ -191,7 +191,7 @@ Current baseline:
 
 - Deterministic local adapters for parser, pasted JD intake, search, transcription, and analysis flows.
 - Job intake handles Boss-style URLs and pasted JD text through the same source-backed report path.
-- A runnable `SearchSource` plugin example for contributors.
+- A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.

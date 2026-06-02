@@ -16,30 +16,13 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Web routes live in `src/offerpilot/routes/web.py` and templates live in `src/offerpilot/templates/`.
 - API routes live in `src/offerpilot/routes/api.py`.
 - Runnable examples live in `examples/search-source-plugin/` and `examples/reports/`.
+- The search-source plugin example returns multiple deterministic fixture candidates without live network access.
 
 ## Good First Issues
 
 These are small enough for first-time contributors and concrete enough to review.
 
-### 1. Add A Second Fixture SearchSource
-
-Goal: make the plugin example more useful without adding network access.
-
-Suggested paths:
-
-- `examples/search-source-plugin/example_source.py`
-- `examples/search-source-plugin/run_example.py`
-- `examples/search-source-plugin/README.md`
-- `tests/test_adapter_example.py`
-
-Acceptance criteria:
-
-- The example returns at least two deterministic candidates with `title`, `url`, `snippet`, `publisher`, and `published_at`.
-- `python examples/search-source-plugin/run_example.py` prints a report containing `sourceUrls`.
-- `pytest tests/test_adapter_example.py` passes.
-- The README states that the example is fixture-backed and not live search.
-
-### 2. Expand Pasted JD Parser Coverage
+### 1. Expand Pasted JD Parser Coverage
 
 Goal: improve the pasted-JD parser beyond the current backend fixture and make it useful for more roles.
 
@@ -60,7 +43,7 @@ Acceptance criteria:
 - Pasted JD text remains user context, not public evidence.
 - The resulting report still requires external `sourceUrls` from the search provider.
 
-### 3. Add Interview Intake Fixtures
+### 2. Add Interview Intake Fixtures
 
 Goal: give contributors a safe way to test transcript-backed summaries without committing real recordings.
 

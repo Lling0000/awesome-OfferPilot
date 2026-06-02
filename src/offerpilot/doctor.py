@@ -267,6 +267,16 @@ STRICT_CONTENT_REQUIREMENTS = {
             ),
         ),
     ],
+    "examples/search-source-plugin/README.md": [
+        ContentRequirement(
+            "fixture-backed search source example",
+            (
+                "It does not call a live search API",
+                "at least two deterministic raw candidates",
+                "query_ids",
+            ),
+        ),
+    ],
 }
 
 

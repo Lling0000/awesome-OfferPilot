@@ -127,9 +127,7 @@ def normalize_evidence_items(
             "overall_score": overall,
             "quality_label": quality_label(overall, relevance, freshness, credibility),
             "score_reason_details": reason_details,
-            "score_reasons": [
-                reason for key, reason in reason_details.items() if key != "usage"
-            ],
+            "score_reasons": [reason for key, reason in reason_details.items() if key != "usage"],
             "usage_guidance": reason_details["usage"],
         }
         normalized_by_url[canonical_url] = enriched
@@ -266,6 +264,8 @@ def usage_guidance(
         return "Use only for historical context unless a newer source corroborates it."
     if relevance_score < 0.5 or overall_score < 0.5:
         return "Treat as background context, not a central report claim."
+    if credibility_score < 0.72:
+        return "Use with corroboration before confident wording."
     if overall_score < 0.75:
         return "Use cautiously and prefer corroboration before confident wording."
     return "Safe to use for normal report claims when the summary cites this source."

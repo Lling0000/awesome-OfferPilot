@@ -2,7 +2,7 @@
 
 This directory shows the smallest useful `SearchSource` plugin for OfferPilot.
 
-It does not call a live search API. Instead, it searches a tiny in-memory dataset so contributors can understand the adapter contract without signing up for external services.
+It does not call a live search API. Instead, it searches a tiny in-memory dataset with fictional `example.com` URLs so contributors can understand the adapter contract without signing up for external services.
 
 ## Run It
 
@@ -15,7 +15,7 @@ python examples/search-source-plugin/run_example.py
 Expected behavior:
 
 - `ExampleSearchSource` receives each query-plan item.
-- It returns raw candidates with URLs, snippets, source types, publisher names, dates, adapter name, and `query_ids`.
+- It returns at least two deterministic raw candidates for forum-style queries, with URLs, snippets, source types, publisher names, dates, adapter name, and `query_ids`.
 - `MockSearchProvider(sources=[ExampleSearchSource()])` normalizes, deduplicates, scores, and returns source-backed evidence.
 
 ## Contract
