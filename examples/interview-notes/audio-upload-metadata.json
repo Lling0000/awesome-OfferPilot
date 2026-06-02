@@ -1,0 +1,15 @@
+{
+  "fixture": "fictional-audio-upload",
+  "file_name": "example-technical-round.m4a",
+  "content_type": "audio/mp4",
+  "duration_seconds": 180,
+  "stage": "technical",
+  "company_name": "Example Robotics",
+  "job_title": "Backend Engineer Intern",
+  "fixture_policy": "Metadata only. The audio recording is intentionally absent and must not be committed.",
+  "privacy": {
+    "transcript_private": true,
+    "public_evidence": false,
+    "sourceUrls": []
+  }
+}

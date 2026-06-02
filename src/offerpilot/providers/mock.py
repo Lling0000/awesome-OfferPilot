@@ -100,6 +100,8 @@ class MockTranscriptionProvider:
     def transcribe(self, file_path: str) -> dict:
         return {
             "file_path": file_path,
+            "provider": "mock-transcription",
+            "privacy": "private_user_context",
             "transcript": (
                 "The interviewer asked about backend projects, SQL indexes, "
                 "and how I would prepare for the next round."

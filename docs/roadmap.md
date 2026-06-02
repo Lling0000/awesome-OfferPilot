@@ -13,6 +13,8 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
 - Report evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Source URL validation lives in `src/offerpilot/reports.py`.
+- Interview-note fixtures and audio-upload metadata fixtures live in `examples/interview-notes/`.
+- Interview transcripts are private user context and are not `sourceUrls`.
 - Web routes live in `src/offerpilot/routes/web.py` and templates live in `src/offerpilot/templates/`.
 - API routes live in `src/offerpilot/routes/api.py`.
 - Runnable examples live in `examples/search-source-plugin/` and `examples/reports/`.
@@ -42,25 +44,6 @@ Acceptance criteria:
 - Mixed Chinese/English JD fields can still produce stable company, role, city, and skill fields.
 - Pasted JD text remains user context, not public evidence.
 - The resulting report still requires external `sourceUrls` from the search provider.
-
-### 2. Add Interview Intake Fixtures
-
-Goal: give contributors a safe way to test transcript-backed summaries without committing real recordings.
-
-Suggested paths:
-
-- `examples/`
-- `src/offerpilot/providers/mock.py`
-- `src/offerpilot/interviews.py`
-- `docs/privacy.md`
-- `tests/test_interviews.py`
-
-Acceptance criteria:
-
-- Example interview notes are fictional and safe to commit.
-- Mock transcription/analyzer output remains deterministic.
-- Transcript text is treated as private user context, not a `sourceUrls` citation.
-- Tests cover typed notes and uploaded fixture metadata.
 
 ## Larger Tracks
 

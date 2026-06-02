@@ -107,6 +107,14 @@ Examples in this repository must be fictional. Do not commit:
 
 Use obvious placeholders such as `alex@example.com`, `ExampleCo`, and `https://example.com/...`.
 
+### Interview Fixtures
+
+Interview-note fixtures may be committed only when they are fictional and clearly labeled as private user context. They can be used to test typed-note intake, transcript-backed summaries, and follow-up extraction.
+
+Uploaded audio fixtures should use metadata-only examples such as `examples/interview-notes/audio-upload-metadata.json`. Do not commit real recordings. A metadata fixture can include a pretend file name, content type, duration, stage, company, and role, but the recording itself must remain absent.
+
+Interview transcripts, typed notes, and audio-derived text are not public evidence. They must not appear in `sourceUrls`, and they should not be sent to search providers by default.
+
 ## Security Relationship
 
 Privacy and security overlap. Vulnerabilities that expose resumes, voice transcripts, files, application records, reminders, or evidence reports should be reported through the process in `SECURITY.md`.

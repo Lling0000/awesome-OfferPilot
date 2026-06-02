@@ -33,6 +33,10 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "examples/search-source-plugin/README.md" in STRICT_FILES
     assert "examples/search-source-plugin/example_source.py" in STRICT_FILES
     assert "examples/search-source-plugin/run_example.py" in STRICT_FILES
+    assert "examples/interview-notes/README.md" in STRICT_FILES
+    assert "examples/interview-notes/phone-screen.md" in STRICT_FILES
+    assert "examples/interview-notes/technical-round.md" in STRICT_FILES
+    assert "examples/interview-notes/audio-upload-metadata.json" in STRICT_FILES
     assert "examples/reports/daily-intelligence-with-sourceUrls.json" in STRICT_FILES
     assert "examples/job-descriptions/backend-platform-jd.txt" in STRICT_FILES
     assert "assets/screenshots/dashboard.png" in STRICT_FILES

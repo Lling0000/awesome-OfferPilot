@@ -54,6 +54,10 @@ STRICT_FILES = [
     ".env.example",
     "examples/reports/job-report-with-sourceUrls.json",
     "examples/reports/daily-intelligence-with-sourceUrls.json",
+    "examples/interview-notes/README.md",
+    "examples/interview-notes/phone-screen.md",
+    "examples/interview-notes/technical-round.md",
+    "examples/interview-notes/audio-upload-metadata.json",
     "examples/job-descriptions/backend-platform-jd.txt",
     "docs/architecture.md",
     "docs/demo-script.md",
@@ -274,6 +278,26 @@ STRICT_CONTENT_REQUIREMENTS = {
                 "It does not call a live search API",
                 "at least two deterministic raw candidates",
                 "query_ids",
+            ),
+        ),
+    ],
+    "examples/interview-notes/README.md": [
+        ContentRequirement(
+            "safe interview fixture policy",
+            (
+                "fictional and safe to commit",
+                "metadata for a pretend uploaded audio file",
+                "Interview transcripts must not appear in `sourceUrls`",
+            ),
+        ),
+    ],
+    "docs/privacy.md": [
+        ContentRequirement(
+            "interview fixture privacy policy",
+            (
+                "Interview Fixtures",
+                "metadata-only examples",
+                "must not appear in `sourceUrls`",
             ),
         ),
     ],

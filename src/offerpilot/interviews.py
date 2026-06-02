@@ -79,6 +79,11 @@ def run_interview_intake(
             "transcription": transcription,
             "audio_file_name": clean_file_name,
             "typed_note_present": bool(clean_note),
+            "privacy": {
+                "transcript_private": True,
+                "public_evidence": False,
+                "sourceUrls": [],
+            },
             "agent_run_id": run.id,
         },
         feedback_text=clean_note or None,

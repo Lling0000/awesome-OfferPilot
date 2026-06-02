@@ -195,6 +195,7 @@ Current baseline:
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
+- Fictional interview-note and audio-metadata fixtures test transcripts as private user context, not public evidence.
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
 - Strict publish checks that require evidence docs, examples, license, and `sourceUrls` validation.
 
