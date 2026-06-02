@@ -48,6 +48,7 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "examples/job-descriptions/frontend-growth-jd.txt" in STRICT_FILES
     assert "examples/job-descriptions/data-analytics-jd.txt" in STRICT_FILES
     assert "examples/job-descriptions/product-operations-jd.txt" in STRICT_FILES
+    assert "examples/job-descriptions/pasted-jds.jsonl" in STRICT_FILES
     assert "assets/screenshots/dashboard.png" in STRICT_FILES
     assert "assets/screenshots/report.png" in STRICT_FILES
     assert "assets/screenshots/intelligence.png" in STRICT_FILES
@@ -90,4 +91,9 @@ def test_strict_publish_rejects_placeholder_publish_files(tmp_path) -> None:
     assert (
         "structured job-link fixture metadata"
         in checks["content:examples/job-links/shared-links.jsonl"].detail
+    )
+    assert not checks["content:examples/job-descriptions/pasted-jds.jsonl"].ok
+    assert (
+        "structured pasted JD fixture metadata"
+        in checks["content:examples/job-descriptions/pasted-jds.jsonl"].detail
     )

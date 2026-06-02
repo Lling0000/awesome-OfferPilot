@@ -14,7 +14,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Shared job-link parser fixtures exercise Boss, company-careers, mirrored job-board, mobile/shared redirect, and LinkedIn-style public URL shapes.
 - Boss, company-careers, mirrored job-board, and shared job-link fixtures include JSONL metadata for expected platform, source type, company, role, city, JD text, skills, and `public_evidence=false`.
 - Pasted JD text is private user context and must not be counted as public evidence.
-- Pasted JD parser fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
+- Pasted JD parser fixtures cover backend, frontend, data, and product-style roles with JSONL metadata, including mixed Chinese/English fields and `private_user_context` boundaries.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
 - Report evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Report claim sections cite stored evidence item IDs with `sourceIds`; those IDs link to evidence cards, and weak or stale evidence becomes `unknowns`, not confident recommendations.
@@ -30,7 +30,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 Current contributor-friendly issues:
 
-- [#14 Add structured metadata for pasted JD fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/14)
+- [#15 Add structured metadata for interview note fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/15)
 
 ## Larger Tracks
 

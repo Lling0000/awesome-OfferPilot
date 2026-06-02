@@ -186,11 +186,13 @@ Structured parser fixture metadata lives in `examples/job-links/*.jsonl`, includ
 
 Each parser fixture should define `id`, `input_url`, `platform`, `source_type`, `company_name`, `job_title`, optional `city`, inline `jd_text` or a `jd_fixture` reference, extracted `skills`, and `public_evidence=false`.
 
+Pasted JD fixture metadata lives in `examples/job-descriptions/pasted-jds.jsonl`. Each row references a `jd_fixture`, expected company, role, city, skills, `source_type: "pasted_jd"`, `privacy: "private_user_context"`, and `public_evidence=false`.
+
 Use fictional `.test` domains or clearly non-sensitive public-style examples. Do not commit real private job leads, cookies, screenshots, recruiter messages, or tokens.
 
 Shared/mobile redirect fixtures should prove canonicalization only when it is deterministic. Otherwise preserve the raw URL and keep the parsed job post as lead context.
 
-Structured parser fixture metadata is not completed-report evidence. Parsed job posts must never satisfy report `sourceUrls`; the intake flow still has to run forced search and attach external public links.
+Structured parser fixture metadata is not completed-report evidence. Parsed job posts and pasted JD metadata must never satisfy report `sourceUrls`; the intake flow still has to run forced search and attach external public links.
 
 ## Adapter Implementation Checklist
 

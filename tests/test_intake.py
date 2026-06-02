@@ -44,6 +44,15 @@ def _job_link_fixture(fixture_name: str, platform: str) -> dict:
     )
 
 
+def _pasted_jd_fixtures() -> list[dict]:
+    fixture_path = JD_FIXTURE_DIR / "pasted-jds.jsonl"
+    return [
+        json.loads(line)
+        for line in fixture_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
 def test_provider_bundle_exposes_replaceable_interfaces() -> None:
     bundle = MockProviderBundle()
     parsed = bundle.job_link_parser.parse("https://www.zhipin.com/job_detail/example.html")
@@ -232,44 +241,23 @@ def test_run_pasted_jd_intake_rejects_short_text(tmp_path) -> None:
 
 def test_pasted_jd_parser_fixtures_cover_multiple_role_families() -> None:
     parser = MockProviderBundle().job_link_parser
-    cases = [
-        (
-            "backend-platform-jd.txt",
-            "Example Analytics",
-            "Backend Platform Intern",
-            "Shanghai",
-            {"Python", "FastAPI", "SQL", "Redis"},
-        ),
-        (
-            "frontend-growth-jd.txt",
-            "Example Retail",
-            "Frontend Growth Intern",
-            "Hangzhou",
-            {"React", "TypeScript", "JavaScript", "Vue", "Node.js"},
-        ),
-        (
-            "data-analytics-jd.txt",
-            "Example Finance",
-            "数据分析实习生",
-            "深圳",
-            {"Python", "SQL", "Pandas", "Airflow", "Tableau"},
-        ),
-        (
-            "product-operations-jd.txt",
-            "Example Health",
-            "Product Manager Intern",
-            "Beijing",
-            {"Product Analytics", "A/B Testing", "Roadmap", "SQL"},
-        ),
-    ]
+    fixtures = _pasted_jd_fixtures()
+    assert fixtures
+    assert all(fixture["public_evidence"] is False for fixture in fixtures)
+    assert all(fixture["privacy"] == "private_user_context" for fixture in fixtures)
+    assert all("sourceUrls" in fixture["completed_report_requirement"] for fixture in fixtures)
 
-    for fixture_name, company, role, city, expected_skills in cases:
-        parsed = parser.parse_text((JD_FIXTURE_DIR / fixture_name).read_text(encoding="utf-8"))
-        assert parsed["company_name"] == company
-        assert parsed["job_title"] == role
-        assert parsed["city"] == city
-        assert expected_skills.issubset(set(parsed["skills"]))
-        assert parsed["public_evidence"] is False
+    for fixture in fixtures:
+        parsed = parser.parse_text(
+            (JD_FIXTURE_DIR / fixture["jd_fixture"]).read_text(encoding="utf-8")
+        )
+        assert parsed["platform"] == fixture["platform"]
+        assert parsed["source_type"] == fixture["source_type"]
+        assert parsed["company_name"] == fixture["company_name"]
+        assert parsed["job_title"] == fixture["job_title"]
+        assert parsed["city"] == fixture["city"]
+        assert set(fixture["skills"]).issubset(set(parsed["skills"]))
+        assert parsed["public_evidence"] is fixture["public_evidence"]
 
 
 def test_job_link_parser_fixtures_cover_company_careers_and_mirrors() -> None:
@@ -343,32 +331,24 @@ def test_job_link_parser_fixtures_cover_shared_links() -> None:
 def test_pasted_jd_intake_fixtures_still_require_source_urls(tmp_path) -> None:
     db_url = f"sqlite:///{tmp_path}/offerpilot.db"
     reset_db(db_url)
+    fixtures = _pasted_jd_fixtures()
 
-    fixture_names = [
-        "frontend-growth-jd.txt",
-        "data-analytics-jd.txt",
-        "product-operations-jd.txt",
-    ]
     with session_scope(db_url) as session:
         user = ensure_demo_user(session)
         results = [
             run_pasted_jd_intake(
                 session,
                 user,
-                (JD_FIXTURE_DIR / fixture_name).read_text(encoding="utf-8"),
+                (JD_FIXTURE_DIR / fixture["jd_fixture"]).read_text(encoding="utf-8"),
             )
-            for fixture_name in fixture_names
+            for fixture in fixtures
         ]
 
     with session_scope(db_url) as session:
         reports = [session.get(SearchReport, result["search_report_id"]) for result in results]
         apps = [session.get(Application, result["application_id"]) for result in results]
 
-    assert [app.job_title for app in apps] == [
-        "Frontend Growth Intern",
-        "数据分析实习生",
-        "Product Manager Intern",
-    ]
+    assert [app.job_title for app in apps] == [fixture["job_title"] for fixture in fixtures]
     assert all(report.source_urls_json for report in reports)
 
 
