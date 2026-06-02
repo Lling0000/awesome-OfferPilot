@@ -41,6 +41,7 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "examples/job-links/boss-zhipin.txt" in STRICT_FILES
     assert "examples/job-links/company-careers.txt" in STRICT_FILES
     assert "examples/job-links/shared-links.txt" in STRICT_FILES
+    assert "examples/job-links/shared-links.jsonl" in STRICT_FILES
     assert "examples/job-descriptions/backend-platform-jd.txt" in STRICT_FILES
     assert "examples/job-descriptions/frontend-growth-jd.txt" in STRICT_FILES
     assert "examples/job-descriptions/data-analytics-jd.txt" in STRICT_FILES
@@ -73,3 +74,8 @@ def test_strict_publish_rejects_placeholder_publish_files(tmp_path) -> None:
     assert "package discovery metadata" in checks["content:pyproject.toml"].detail
     assert not checks["content:.github/workflows/ci.yml"].ok
     assert "Python version matrix" in checks["content:.github/workflows/ci.yml"].detail
+    assert not checks["content:examples/job-links/shared-links.jsonl"].ok
+    assert (
+        "structured job-link fixture metadata"
+        in checks["content:examples/job-links/shared-links.jsonl"].detail
+    )

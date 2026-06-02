@@ -182,13 +182,15 @@ The example intentionally avoids real audio files, API keys, and network calls. 
 
 ## JobLinkParser Fixture Contract
 
-Each parser fixture should define the input URL, `platform`, `source_type`, `company_name`, `job_title`, optional `city`, JD text, extracted skills, and `public_evidence=false`.
+Shared parser fixture metadata lives in `examples/job-links/shared-links.jsonl`. Each line is one JSONL object so contributors can append a new deterministic input without rewriting a large fixture file.
+
+Each parser fixture should define `id`, `input_url`, `platform`, `source_type`, `company_name`, `job_title`, optional `city`, inline `jd_text` or a `jd_fixture` reference, extracted `skills`, and `public_evidence=false`.
 
 Use fictional `.test` domains or clearly non-sensitive public-style examples. Do not commit real private job leads, cookies, screenshots, recruiter messages, or tokens.
 
 Shared/mobile redirect fixtures should prove canonicalization only when it is deterministic. Otherwise preserve the raw URL and keep the parsed job post as lead context.
 
-Parsed job posts are not completed-report evidence. They must never satisfy report `sourceUrls`; the intake flow still has to run forced search and attach external public links.
+Structured parser fixture metadata is not completed-report evidence. Parsed job posts must never satisfy report `sourceUrls`; the intake flow still has to run forced search and attach external public links.
 
 ## Adapter Implementation Checklist
 

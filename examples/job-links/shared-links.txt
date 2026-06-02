@@ -2,6 +2,7 @@
 #
 # These links are deterministic fixtures for parser and workflow examples.
 # They are fictional and do not describe real jobs.
+# Expected parser metadata lives in shared-links.jsonl.
 
 https://www.linkedin.example.test/jobs/view/backend-platform-intern-123
 https://m.example-jobs.test/r/job-share?target=product-operations-intern

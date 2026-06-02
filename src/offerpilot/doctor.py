@@ -61,6 +61,7 @@ STRICT_FILES = [
     "examples/job-links/boss-zhipin.txt",
     "examples/job-links/company-careers.txt",
     "examples/job-links/shared-links.txt",
+    "examples/job-links/shared-links.jsonl",
     "examples/job-descriptions/backend-platform-jd.txt",
     "examples/job-descriptions/frontend-growth-jd.txt",
     "examples/job-descriptions/data-analytics-jd.txt",
@@ -112,7 +113,7 @@ STRICT_CONTENT_REQUIREMENTS = {
             (
                 "recursive-include docs *.md",
                 "recursive-include assets *.svg *.png",
-                "recursive-include examples *.md *.json *.py *.txt",
+                "recursive-include examples *.md *.json *.jsonl *.py *.txt",
             ),
         ),
     ],
@@ -277,6 +278,8 @@ STRICT_CONTENT_REQUIREMENTS = {
             "job-link parser fixture contract",
             (
                 "JobLinkParser Fixture Contract",
+                "shared-links.jsonl",
+                "JSONL",
                 "public_evidence=false",
                 "mobile/shared redirect",
                 "LinkedIn-style public",
@@ -309,9 +312,25 @@ STRICT_CONTENT_REQUIREMENTS = {
         ContentRequirement(
             "shared-link lead context markers",
             (
+                "shared-links.jsonl",
                 "mobile/shared redirect",
                 "LinkedIn-style public",
                 "public_evidence=false",
+                "sourceUrls",
+            ),
+        ),
+    ],
+    "examples/job-links/shared-links.jsonl": [
+        ContentRequirement(
+            "structured job-link fixture metadata",
+            (
+                '"public_evidence": false',
+                '"source_type"',
+                '"company_name"',
+                '"job_title"',
+                '"skills"',
+                "https://www.linkedin.example.test/jobs/view/backend-platform-intern-123",
+                "https://m.example-jobs.test/r/job-share?target=product-operations-intern",
                 "sourceUrls",
             ),
         ),
