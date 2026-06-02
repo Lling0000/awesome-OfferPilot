@@ -59,7 +59,9 @@ STRICT_FILES = [
     "examples/interview-notes/technical-round.md",
     "examples/interview-notes/audio-upload-metadata.json",
     "examples/job-links/boss-zhipin.txt",
+    "examples/job-links/boss-zhipin.jsonl",
     "examples/job-links/company-careers.txt",
+    "examples/job-links/company-careers.jsonl",
     "examples/job-links/shared-links.txt",
     "examples/job-links/shared-links.jsonl",
     "examples/job-descriptions/backend-platform-jd.txt",
@@ -278,6 +280,9 @@ STRICT_CONTENT_REQUIREMENTS = {
             "job-link parser fixture contract",
             (
                 "JobLinkParser Fixture Contract",
+                "examples/job-links/*.jsonl",
+                "boss-zhipin.jsonl",
+                "company-careers.jsonl",
                 "shared-links.jsonl",
                 "JSONL",
                 "public_evidence=false",
@@ -292,7 +297,22 @@ STRICT_CONTENT_REQUIREMENTS = {
             "Boss-style lead context markers",
             (
                 "zhipin.com/job_detail",
+                "boss-zhipin.jsonl",
                 "public_evidence=false",
+                "sourceUrls",
+            ),
+        ),
+    ],
+    "examples/job-links/boss-zhipin.jsonl": [
+        ContentRequirement(
+            "structured Boss-style fixture metadata",
+            (
+                '"public_evidence": false',
+                '"source_type": "boss_job_link"',
+                '"company_name": "Example Robotics"',
+                '"job_title": "Backend Engineer Intern"',
+                '"skills":',
+                "https://www.zhipin.com/job_detail/example-backend-platform-intern.html",
                 "sourceUrls",
             ),
         ),
@@ -303,7 +323,24 @@ STRICT_CONTENT_REQUIREMENTS = {
             (
                 "careers.example-retail.test",
                 "jobs.example-mirror.test",
+                "company-careers.jsonl",
                 "public_evidence=false",
+                "sourceUrls",
+            ),
+        ),
+    ],
+    "examples/job-links/company-careers.jsonl": [
+        ContentRequirement(
+            "structured company and mirror fixture metadata",
+            (
+                '"public_evidence": false',
+                '"source_type": "company_careers_page"',
+                '"source_type": "mirrored_job_board"',
+                '"company_name": "Example Retail"',
+                '"company_name": "Example Finance"',
+                '"skills":',
+                "https://careers.example-retail.test/jobs/frontend-growth-intern",
+                "https://jobs.example-mirror.test/mirrors/example-finance-data-intern",
                 "sourceUrls",
             ),
         ),

@@ -27,8 +27,8 @@ Build Python services for candidate analytics with FastAPI, SQL, Redis, and asyn
 """
 
 
-def _shared_link_fixtures() -> list[dict]:
-    fixture_path = JOB_LINK_FIXTURE_DIR / "shared-links.jsonl"
+def _job_link_fixtures(fixture_name: str) -> list[dict]:
+    fixture_path = JOB_LINK_FIXTURE_DIR / fixture_name
     return [
         json.loads(line)
         for line in fixture_path.read_text(encoding="utf-8").splitlines()
@@ -36,8 +36,12 @@ def _shared_link_fixtures() -> list[dict]:
     ]
 
 
-def _shared_link_fixture(platform: str) -> dict:
-    return next(fixture for fixture in _shared_link_fixtures() if fixture["platform"] == platform)
+def _job_link_fixture(fixture_name: str, platform: str) -> dict:
+    return next(
+        fixture
+        for fixture in _job_link_fixtures(fixture_name)
+        if fixture["platform"] == platform
+    )
 
 
 def test_provider_bundle_exposes_replaceable_interfaces() -> None:
@@ -58,35 +62,45 @@ def test_provider_bundle_exposes_replaceable_interfaces() -> None:
 def test_run_job_link_intake_creates_source_backed_flow(tmp_path) -> None:
     db_url = f"sqlite:///{tmp_path}/offerpilot.db"
     reset_db(db_url)
+    fixture = _job_link_fixture("boss-zhipin.jsonl", "boss")
 
     with session_scope(db_url) as session:
         user = ensure_demo_user(session)
         result = run_job_link_intake(
             session,
             user,
-            "https://www.zhipin.com/job_detail/provider-test.html",
+            fixture["input_url"],
         )
 
     with session_scope(db_url) as session:
         app_record = session.get(Application, result["application_id"])
+        job_source = session.get(JobLink, result["job_link_id"])
         report = session.get(SearchReport, result["search_report_id"])
         evidence = session.scalars(select(EvidenceItem)).all()
 
-    assert app_record.company_name == "Example Robotics"
+    assert app_record.company_name == fixture["company_name"]
+    assert app_record.job_title == fixture["job_title"]
+    assert app_record.city == fixture["city"]
+    assert app_record.channel == fixture["platform"]
+    assert job_source.parsed_payload["source_type"] == fixture["source_type"]
+    assert job_source.parsed_payload["public_evidence"] is fixture["public_evidence"]
+    assert set(fixture["skills"]).issubset(set(job_source.parsed_payload["skills"]))
     assert report.source_urls_json
+    assert fixture["input_url"] not in report.source_urls_json
     assert evidence
 
 
 def test_run_company_career_link_intake_creates_source_backed_flow(tmp_path) -> None:
     db_url = f"sqlite:///{tmp_path}/offerpilot.db"
     reset_db(db_url)
+    fixture = _job_link_fixture("company-careers.jsonl", "company_careers")
 
     with session_scope(db_url) as session:
         user = ensure_demo_user(session)
         result = run_job_link_intake(
             session,
             user,
-            "https://careers.example-retail.test/jobs/frontend-growth-intern",
+            fixture["input_url"],
         )
 
     with session_scope(db_url) as session:
@@ -94,23 +108,22 @@ def test_run_company_career_link_intake_creates_source_backed_flow(tmp_path) -> 
         job_source = session.get(JobLink, result["job_link_id"])
         report = session.get(SearchReport, result["search_report_id"])
 
-    assert app_record.company_name == "Example Retail"
-    assert app_record.job_title == "Frontend Growth Intern"
-    assert app_record.city == "Hangzhou"
-    assert app_record.channel == "company_careers"
-    assert job_source.parsed_payload["source_type"] == "company_careers_page"
-    assert job_source.parsed_payload["public_evidence"] is False
-    assert {"React", "TypeScript", "A/B Testing"}.issubset(
-        set(job_source.parsed_payload["skills"])
-    )
+    assert app_record.company_name == fixture["company_name"]
+    assert app_record.job_title == fixture["job_title"]
+    assert app_record.city == fixture["city"]
+    assert app_record.channel == fixture["platform"]
+    assert job_source.parsed_payload["source_type"] == fixture["source_type"]
+    assert job_source.parsed_payload["public_evidence"] is fixture["public_evidence"]
+    assert set(fixture["skills"]).issubset(set(job_source.parsed_payload["skills"]))
     assert report.source_urls_json
+    assert fixture["input_url"] not in report.source_urls_json
     assert all(url.startswith("https://") for url in report.source_urls_json)
 
 
 def test_run_shared_job_link_intake_creates_source_backed_flow(tmp_path) -> None:
     db_url = f"sqlite:///{tmp_path}/offerpilot.db"
     reset_db(db_url)
-    fixture = _shared_link_fixture("mobile_job_share")
+    fixture = _job_link_fixture("shared-links.jsonl", "mobile_job_share")
     shared_url = fixture["input_url"]
 
     with session_scope(db_url) as session:
@@ -262,45 +275,52 @@ def test_pasted_jd_parser_fixtures_cover_multiple_role_families() -> None:
 def test_job_link_parser_fixtures_cover_company_careers_and_mirrors() -> None:
     parser = MockProviderBundle().job_link_parser
     fixture_text = (JOB_LINK_FIXTURE_DIR / "company-careers.txt").read_text(encoding="utf-8")
+    fixtures = _job_link_fixtures("company-careers.jsonl")
     assert "careers.example-retail.test" in fixture_text
     assert "jobs.example-mirror.test" in fixture_text
+    assert fixtures
+    assert all(fixture["public_evidence"] is False for fixture in fixtures)
+    assert all("sourceUrls" in fixture["completed_report_requirement"] for fixture in fixtures)
 
-    cases = [
-        (
-            "https://careers.example-retail.test/jobs/frontend-growth-intern",
-            "company_careers",
-            "company_careers_page",
-            "Example Retail",
-            "Frontend Growth Intern",
-            "Hangzhou",
-            {"React", "TypeScript", "JavaScript", "Vue", "Node.js", "A/B Testing"},
-        ),
-        (
-            "https://jobs.example-mirror.test/mirrors/example-finance-data-intern",
-            "mirrored_job_board",
-            "mirrored_job_board",
-            "Example Finance",
-            "Data Analytics Intern",
-            "Shenzhen",
-            {"Python", "SQL", "Pandas", "Airflow", "Tableau"},
-        ),
-    ]
+    for fixture in fixtures:
+        parsed = parser.parse(fixture["input_url"])
+        assert fixture["input_url"] in fixture_text
+        assert parsed["platform"] == fixture["platform"]
+        assert parsed["source_type"] == fixture["source_type"]
+        assert parsed["company_name"] == fixture["company_name"]
+        assert parsed["job_title"] == fixture["job_title"]
+        assert parsed["city"] == fixture["city"]
+        assert parsed["jd_text"] == fixture["jd_text"]
+        assert set(fixture["skills"]).issubset(set(parsed["skills"]))
+        assert parsed["public_evidence"] is fixture["public_evidence"]
 
-    for url, platform, source_type, company, role, city, expected_skills in cases:
-        parsed = parser.parse(url)
-        assert parsed["platform"] == platform
-        assert parsed["source_type"] == source_type
-        assert parsed["company_name"] == company
-        assert parsed["job_title"] == role
-        assert parsed["city"] == city
-        assert expected_skills.issubset(set(parsed["skills"]))
-        assert parsed["public_evidence"] is False
+
+def test_job_link_parser_fixtures_cover_boss_links() -> None:
+    parser = MockProviderBundle().job_link_parser
+    fixture_text = (JOB_LINK_FIXTURE_DIR / "boss-zhipin.txt").read_text(encoding="utf-8")
+    fixtures = _job_link_fixtures("boss-zhipin.jsonl")
+    assert "zhipin.com/job_detail" in fixture_text
+    assert fixtures
+    assert all(fixture["public_evidence"] is False for fixture in fixtures)
+    assert all("sourceUrls" in fixture["completed_report_requirement"] for fixture in fixtures)
+
+    for fixture in fixtures:
+        parsed = parser.parse(fixture["input_url"])
+        assert fixture["input_url"] in fixture_text
+        assert parsed["platform"] == fixture["platform"]
+        assert parsed["source_type"] == fixture["source_type"]
+        assert parsed["company_name"] == fixture["company_name"]
+        assert parsed["job_title"] == fixture["job_title"]
+        assert parsed["city"] == fixture["city"]
+        assert parsed["jd_text"] == fixture["jd_text"]
+        assert set(fixture["skills"]).issubset(set(parsed["skills"]))
+        assert parsed["public_evidence"] is fixture["public_evidence"]
 
 
 def test_job_link_parser_fixtures_cover_shared_links() -> None:
     parser = MockProviderBundle().job_link_parser
     fixture_text = (JOB_LINK_FIXTURE_DIR / "shared-links.txt").read_text(encoding="utf-8")
-    fixtures = _shared_link_fixtures()
+    fixtures = _job_link_fixtures("shared-links.jsonl")
     assert "linkedin.example.test" in fixture_text
     assert "m.example-jobs.test" in fixture_text
     assert fixtures

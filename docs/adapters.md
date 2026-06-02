@@ -182,7 +182,7 @@ The example intentionally avoids real audio files, API keys, and network calls. 
 
 ## JobLinkParser Fixture Contract
 
-Shared parser fixture metadata lives in `examples/job-links/shared-links.jsonl`. Each line is one JSONL object so contributors can append a new deterministic input without rewriting a large fixture file.
+Structured parser fixture metadata lives in `examples/job-links/*.jsonl`, including `boss-zhipin.jsonl`, `company-careers.jsonl`, and `shared-links.jsonl`. Each line is one JSONL object so contributors can append a new deterministic input without rewriting a large fixture file.
 
 Each parser fixture should define `id`, `input_url`, `platform`, `source_type`, `company_name`, `job_title`, optional `city`, inline `jd_text` or a `jd_fixture` reference, extracted `skills`, and `public_evidence=false`.
 

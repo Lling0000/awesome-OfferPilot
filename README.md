@@ -196,7 +196,7 @@ Current baseline:
 - Deterministic local adapters for parser, pasted JD intake, search, transcription, and analysis flows.
 - Job intake handles Boss-style URLs, company career pages, mirrored job-board pages, mobile/shared redirects, LinkedIn-style public URLs, and pasted JD text through the same source-backed report path.
 - Shared job-link parser fixtures exercise Boss, company-careers, mirrored job-board, mobile/shared redirect, and LinkedIn-style public URL shapes.
-- Shared job-link fixtures include JSONL metadata for expected platform, source type, company, role, city, JD text, skills, and `public_evidence=false`.
+- Boss, company-careers, mirrored job-board, and shared job-link fixtures include JSONL metadata for expected platform, source type, company, role, city, JD text, skills, and `public_evidence=false`.
 - Pasted JD fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
@@ -211,7 +211,7 @@ Current baseline:
 
 Next contributor-friendly slices:
 
-- [#13 Add structured metadata for Boss and company-career fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/13)
+- [#14 Add structured metadata for pasted JD fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/14)
 
 ## 中文说明
 

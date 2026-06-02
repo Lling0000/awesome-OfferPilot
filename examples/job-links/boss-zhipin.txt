@@ -3,6 +3,7 @@
 # These links are fixtures for parser and workflow examples. They are not
 # intended to describe real jobs. Replace them with real links during manual
 # testing, then run forced search before generating a report.
+# Expected parser metadata lives in boss-zhipin.jsonl.
 
 https://www.zhipin.com/job_detail/example-backend-platform-intern.html?source=offerpilot-sample
 https://www.zhipin.com/job_detail/example-software-engineer-new-grad.html?source=offerpilot-sample

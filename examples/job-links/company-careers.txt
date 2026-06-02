@@ -2,6 +2,7 @@
 #
 # These links are deterministic fixtures for parser and workflow examples.
 # They are fictional and do not describe real jobs.
+# Expected parser metadata lives in company-careers.jsonl.
 
 https://careers.example-retail.test/jobs/frontend-growth-intern
 https://jobs.example-mirror.test/mirrors/example-finance-data-intern
