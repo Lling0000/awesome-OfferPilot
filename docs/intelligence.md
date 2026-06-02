@@ -42,6 +42,12 @@ Each worker returns linked findings only. A finding must include:
 
 Every completed finding must have a valid `http://` or `https://` `source_url`.
 
+## Daily Intelligence Fixture Contract
+
+Structured fixture metadata lives in `examples/intelligence/daily-intelligence.jsonl`. Each row describes one mock scout result with company scale, role family, signal type, expected tags, source type, retained `sourceUrls`, relevance score, `needs_verification`, and whether the source needs corroboration.
+
+These rows are public-source signals, not private interview notes. Forum and social examples must keep `needs_corroboration=true` and `needs_verification=true` so weak or uncorroborated findings stay marked as needing verification instead of becoming confident preparation claims. Every fixture also keeps `sourceUrls_refresh_required=true` because example URLs are not current live hiring intelligence.
+
 ## Interview Process Signals
 
 OfferPilot tracks process signals rather than making private or over-precise claims:

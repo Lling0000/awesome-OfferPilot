@@ -207,12 +207,12 @@ Current baseline:
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
 - Fictional interview-note fixtures include JSONL metadata, and audio-metadata fixtures test transcripts as private user context, not public evidence.
 - Daily reminder fixtures include JSONL metadata for missing job-search fields, expected reminder categories, and the `sourceUrls` boundary.
-- Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
+- Daily mock intelligence briefs include JSONL metadata for company-scale labels, signal types, source types, relevance, and retained `sourceUrls`.
 - Strict publish checks that require evidence docs, examples, license, and `sourceUrls` validation.
 
 Next contributor-friendly slices:
 
-- [#17 Add structured metadata for daily intelligence fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/17)
+- [#18 Add structured metadata for source-backed report fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/18)
 
 ## 中文说明
 
