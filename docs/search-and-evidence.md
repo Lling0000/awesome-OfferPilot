@@ -200,7 +200,7 @@ Recommended UI behavior:
 - Sort sources by `overall` score by default, with official and exact-match sources near the top.
 - Show low freshness or low credibility warnings visibly.
 - Keep `sourceUrls` accessible even when the report summary is collapsed.
-- Let report sections reference source IDs so users can jump from a claim to its supporting evidence. The current `claimSections` implementation references stored evidence item IDs directly.
+- Let report sections reference source IDs so users can jump from a claim to its supporting evidence. The current `claimSections` implementation references stored evidence item IDs directly, and the report page links those IDs to the matching evidence cards.
 - Avoid hiding weak sources entirely; downgraded sources are useful for explaining uncertainty and conflicts.
 
 ## CLI: `analyze-link`

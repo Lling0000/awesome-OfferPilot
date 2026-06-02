@@ -309,6 +309,7 @@ nav a {
   border-radius: 8px;
   margin: 12px 0;
   padding: 14px;
+  scroll-margin-top: 82px;
 }
 
 .evidence-head {
@@ -523,6 +524,16 @@ nav a {
   max-width: 100%;
   overflow-wrap: anywhere;
   padding: 3px 6px;
+}
+
+.source-id-link {
+  text-decoration: none;
+}
+
+.source-id-link:focus-visible code,
+.source-id-link:hover code {
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .score-row {

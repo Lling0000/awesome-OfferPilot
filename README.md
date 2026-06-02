@@ -201,13 +201,16 @@ Current baseline:
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
 - A fail-closed `ExternalTranscriptionProvider` skeleton for speech-to-text work that keeps transcripts private.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
-- Report claim sections cite stored evidence item IDs with `sourceIds`, and weak sources become `unknowns`.
+- Report claim sections cite stored evidence item IDs with `sourceIds`, link those IDs to evidence cards, and turn weak sources into `unknowns`.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
 - Fictional interview-note and audio-metadata fixtures test transcripts as private user context, not public evidence.
 - Daily mock intelligence briefs that label interview signals by 国央企、大厂、中厂、小厂 and keep `sourceUrls`.
 - Strict publish checks that require evidence docs, examples, license, and `sourceUrls` validation.
 
-The current contributor-friendly issue queue has been implemented. New issues should be opened as small fixture-backed slices from the larger tracks in the roadmap.
+Next contributor-friendly slices:
+
+- [#10 Add transcription transport example fixture](https://github.com/Lling0000/awesome-OfferPilot/issues/10)
+- [#11 Add shared job-link parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/11)
 
 ## 中文说明
 

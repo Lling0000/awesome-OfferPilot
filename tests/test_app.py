@@ -70,6 +70,9 @@ def test_report_page_displays_evidence_score_explanations(monkeypatch, tmp_path)
     assert unknown_source_ids <= evidence_ids
     assert api_report["evidence"][0]["display_domain"] == "example.com"
     assert api_report["evidence"][0]["usage_guidance"]
+    first_claim_source_id = sorted(claim_source_ids)[0]
+    assert f'href="#evidence-{first_claim_source_id}"' in page.text
+    assert f'id="evidence-{first_claim_source_id}"' in page.text
 
 
 def test_pasted_jd_intake_creates_application_report_and_reminders(monkeypatch, tmp_path) -> None:

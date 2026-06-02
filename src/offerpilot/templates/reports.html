@@ -22,7 +22,7 @@
             <span>{{ claim.confidence }} confidence · {{ claim.status }}</span>
             <div class="source-id-row">
               {% for source_id in claim.sourceIds %}
-                <code>{{ source_id }}</code>
+                <a class="source-id-link" href="#evidence-{{ source_id }}"><code>{{ source_id }}</code></a>
               {% endfor %}
             </div>
           </div>
@@ -33,7 +33,7 @@
             <span>{{ item.reason }}</span>
             <div class="source-id-row">
               {% for source_id in item.sourceIds %}
-                <code>{{ source_id }}</code>
+                <a class="source-id-link" href="#evidence-{{ source_id }}"><code>{{ source_id }}</code></a>
               {% endfor %}
             </div>
           </div>
@@ -53,7 +53,7 @@
     <h2>Evidence Quality</h2>
     {% for item in evidence_items %}
       {% set raw = item.raw_json or {} %}
-      <div class="evidence-card">
+      <div class="evidence-card" id="evidence-{{ item.id }}">
         <div class="evidence-head">
           <div>
             <strong>{{ item.title or item.url }}</strong>
