@@ -10,6 +10,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - The external search API skeleton fails closed until credentials, endpoint, and transport are configured.
 - Job intake handles URLs and pasted JD text through the same source-backed report path.
 - Pasted JD text is private user context and must not be counted as public evidence.
+- Pasted JD parser fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
 - Report evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Source URL validation lives in `src/offerpilot/reports.py`.
@@ -22,28 +23,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 ## Good First Issues
 
-These are small enough for first-time contributors and concrete enough to review.
-
-### 1. Expand Pasted JD Parser Coverage
-
-Goal: improve the pasted-JD parser beyond the current backend fixture and make it useful for more roles.
-
-Suggested paths:
-
-- `src/offerpilot/providers/mock.py`
-- `src/offerpilot/intake.py`
-- `src/offerpilot/routes/api.py`
-- `src/offerpilot/templates/dashboard.html`
-- `examples/job-descriptions/`
-- `tests/test_intake.py`
-- `tests/test_app.py`
-
-Acceptance criteria:
-
-- Fixtures cover at least backend, frontend, data, and product-style JD text.
-- Mixed Chinese/English JD fields can still produce stable company, role, city, and skill fields.
-- Pasted JD text remains user context, not public evidence.
-- The resulting report still requires external `sourceUrls` from the search provider.
+The initial good-first queue has been implemented. New contributor-friendly issues should be opened from the larger tracks below, with deterministic fixtures and privacy boundaries before any live provider claim.
 
 ## Larger Tracks
 

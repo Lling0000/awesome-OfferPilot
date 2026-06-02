@@ -12,6 +12,16 @@ KNOWN_SKILLS = [
     "Go",
     "Kubernetes",
     "React",
+    "TypeScript",
+    "JavaScript",
+    "Vue",
+    "Node.js",
+    "Pandas",
+    "Airflow",
+    "Tableau",
+    "Product Analytics",
+    "A/B Testing",
+    "Roadmap",
     "LLM",
 ]
 

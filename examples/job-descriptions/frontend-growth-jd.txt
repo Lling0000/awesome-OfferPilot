@@ -1,0 +1,9 @@
+Company: Example Retail
+Role: Frontend Growth Intern
+City: Hangzhou
+
+Build user-facing growth experiments for a marketplace dashboard. The role works with
+React, TypeScript, JavaScript, Vue, and Node.js. Candidates should be comfortable
+turning product metrics into interface improvements and explaining frontend tradeoffs.
+
+This fixture is fictional. It is user-provided job context, not public evidence.

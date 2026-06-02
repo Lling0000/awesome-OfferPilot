@@ -237,7 +237,12 @@ The pasted JD path should:
 - require external search evidence before the report is considered completed,
 - store only a summary of the JD input in agent-run metadata when possible.
 
-Example fixture: `examples/job-descriptions/backend-platform-jd.txt`.
+Example fixtures:
+
+- `examples/job-descriptions/backend-platform-jd.txt`
+- `examples/job-descriptions/frontend-growth-jd.txt`
+- `examples/job-descriptions/data-analytics-jd.txt`
+- `examples/job-descriptions/product-operations-jd.txt`
 
 ## Search Source Plugins
 

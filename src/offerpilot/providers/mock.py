@@ -156,8 +156,10 @@ def _infer_role(text: str) -> str:
     lowered = text.lower()
     if "frontend" in lowered or "react" in lowered or "前端" in text:
         return "Frontend Engineer"
+    if "product" in lowered or "prd" in lowered or "产品" in text:
+        return "Product Manager"
     if "data" in lowered or "数据" in text:
-        return "Data Engineer"
+        return "Data Analyst"
     if "backend" in lowered or "fastapi" in lowered or "后端" in text:
         return "Backend Engineer"
     return "Software Engineer"

@@ -1,0 +1,9 @@
+Company: Example Health
+Position: Product Manager Intern
+City: Beijing
+
+Work with designers, engineers, and operations to define PRD scope, roadmap priorities,
+Product Analytics dashboards, A/B Testing plans, and launch follow-up. Candidates should
+be able to turn user feedback and SQL-backed metrics into product decisions.
+
+This fixture is fictional. It is user-provided job context, not public evidence.

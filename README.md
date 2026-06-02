@@ -191,6 +191,7 @@ Current baseline:
 
 - Deterministic local adapters for parser, pasted JD intake, search, transcription, and analysis flows.
 - Job intake handles Boss-style URLs and pasted JD text through the same source-backed report path.
+- Pasted JD fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
@@ -202,7 +203,6 @@ Current baseline:
 Next contributor-friendly slices:
 
 - Build real `SearchSource` adapters on top of `ExternalSearchAPISource` with provider-specific transports.
-- Expand parser fixtures for company career pages, mixed-language JDs, and non-backend roles.
 - Add transcription provider adapters while keeping transcripts private user context, not public evidence.
 
 ## 中文说明

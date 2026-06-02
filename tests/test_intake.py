@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pytest
 from sqlalchemy import select
@@ -14,6 +15,8 @@ from offerpilot.intake import (
 )
 from offerpilot.models import AgentRun, Application, EvidenceItem, JobLink, Resume, SearchReport
 from offerpilot.providers import MockProviderBundle
+
+JD_FIXTURE_DIR = Path(__file__).resolve().parents[1] / "examples" / "job-descriptions"
 
 PASTED_JD = """Company: Example Analytics
 Role: Backend Platform Intern
@@ -140,6 +143,80 @@ def test_run_pasted_jd_intake_rejects_short_text(tmp_path) -> None:
         user = ensure_demo_user(session)
         with pytest.raises(IntakeInputError, match="too short"):
             run_pasted_jd_intake(session, user, "too short")
+
+
+def test_pasted_jd_parser_fixtures_cover_multiple_role_families() -> None:
+    parser = MockProviderBundle().job_link_parser
+    cases = [
+        (
+            "backend-platform-jd.txt",
+            "Example Analytics",
+            "Backend Platform Intern",
+            "Shanghai",
+            {"Python", "FastAPI", "SQL", "Redis"},
+        ),
+        (
+            "frontend-growth-jd.txt",
+            "Example Retail",
+            "Frontend Growth Intern",
+            "Hangzhou",
+            {"React", "TypeScript", "JavaScript", "Vue", "Node.js"},
+        ),
+        (
+            "data-analytics-jd.txt",
+            "Example Finance",
+            "数据分析实习生",
+            "深圳",
+            {"Python", "SQL", "Pandas", "Airflow", "Tableau"},
+        ),
+        (
+            "product-operations-jd.txt",
+            "Example Health",
+            "Product Manager Intern",
+            "Beijing",
+            {"Product Analytics", "A/B Testing", "Roadmap", "SQL"},
+        ),
+    ]
+
+    for fixture_name, company, role, city, expected_skills in cases:
+        parsed = parser.parse_text((JD_FIXTURE_DIR / fixture_name).read_text(encoding="utf-8"))
+        assert parsed["company_name"] == company
+        assert parsed["job_title"] == role
+        assert parsed["city"] == city
+        assert expected_skills.issubset(set(parsed["skills"]))
+        assert parsed["public_evidence"] is False
+
+
+def test_pasted_jd_intake_fixtures_still_require_source_urls(tmp_path) -> None:
+    db_url = f"sqlite:///{tmp_path}/offerpilot.db"
+    reset_db(db_url)
+
+    fixture_names = [
+        "frontend-growth-jd.txt",
+        "data-analytics-jd.txt",
+        "product-operations-jd.txt",
+    ]
+    with session_scope(db_url) as session:
+        user = ensure_demo_user(session)
+        results = [
+            run_pasted_jd_intake(
+                session,
+                user,
+                (JD_FIXTURE_DIR / fixture_name).read_text(encoding="utf-8"),
+            )
+            for fixture_name in fixture_names
+        ]
+
+    with session_scope(db_url) as session:
+        reports = [session.get(SearchReport, result["search_report_id"]) for result in results]
+        apps = [session.get(Application, result["application_id"]) for result in results]
+
+    assert [app.job_title for app in apps] == [
+        "Frontend Growth Intern",
+        "数据分析实习生",
+        "Product Manager Intern",
+    ]
+    assert all(report.source_urls_json for report in reports)
 
 
 def test_cli_analyze_link_creates_flow(monkeypatch, tmp_path) -> None:
