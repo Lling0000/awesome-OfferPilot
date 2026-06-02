@@ -203,6 +203,7 @@ Current baseline:
 - A fail-closed `ExternalTranscriptionProvider` skeleton for speech-to-text work that keeps transcripts private.
 - A runnable fixture-backed transcription transport example with no real audio, API keys, or network calls.
 - Evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
+- Source-backed report fixtures include JSONL metadata for retained `sourceUrls`, claim `sourceIds`, evidence quality labels, and weak-source `unknowns`.
 - Report claim sections cite stored evidence item IDs with `sourceIds`, link those IDs to evidence cards, and turn weak sources into `unknowns`.
 - Web and API interview intake for uploaded recordings or typed notes, backed by mock transcription and interview analysis.
 - Fictional interview-note fixtures include JSONL metadata, and audio-metadata fixtures test transcripts as private user context, not public evidence.
@@ -212,7 +213,7 @@ Current baseline:
 
 Next contributor-friendly slices:
 
-- [#18 Add structured metadata for source-backed report fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/18)
+- [#19 Add JSONL fixture schema validator for examples](https://github.com/Lling0000/awesome-OfferPilot/issues/19)
 
 ## 中文说明
 

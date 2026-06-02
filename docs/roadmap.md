@@ -18,6 +18,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
 - Report evidence panels show source type, publisher/domain, quality label, score reasons, and usage guidance.
 - Report claim sections cite stored evidence item IDs with `sourceIds`; those IDs link to evidence cards, and weak or stale evidence becomes `unknowns`, not confident recommendations.
+- Source-backed report fixtures include JSONL metadata for retained `sourceUrls`, required claim `sourceIds`, expected evidence quality labels, and weak-source handling.
 - Source URL validation lives in `src/offerpilot/reports.py`.
 - Interview-note fixtures include JSONL metadata, and audio-upload metadata fixtures live in `examples/interview-notes/`.
 - Interview transcripts are private user context and are not `sourceUrls`.
@@ -32,7 +33,7 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 Current contributor-friendly issues:
 
-- [#18 Add structured metadata for source-backed report fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/18)
+- [#19 Add JSONL fixture schema validator for examples](https://github.com/Lling0000/awesome-OfferPilot/issues/19)
 
 ## Larger Tracks
 

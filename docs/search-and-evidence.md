@@ -159,6 +159,12 @@ A research report should include:
 
 The `sourceUrls` field should be easy to find at the top level. Other sections may use source IDs to avoid repeating long URLs.
 
+## Report Fixture Metadata Contract
+
+Structured report fixture metadata lives in `examples/reports/report-fixtures.jsonl`. Each row names the report fixture file, report type, retained top-level `sourceUrls`, required claim `sourceIds`, `expected_evidence` rows, expected evidence quality labels, minimum unknown count, and weak-source policy.
+
+Completed reports must preserve top-level `sourceUrls`. When evidence is weak, stale, missing, or only useful as background, the report should place that uncertainty in `unknowns` rather than turning it into confident claims. Fixture URLs are placeholders, so rows keep `sourceUrls_refresh_required=true` for real use, and `expected_unknown_sourceIds` documents which structured evidence should not support normal claims.
+
 ## Source Scoring
 
 OfferPilot uses three primary source scores. Each score is a number from `0.00` to `1.00`, where higher means stronger evidence for this report.

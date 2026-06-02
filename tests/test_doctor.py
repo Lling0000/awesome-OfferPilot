@@ -42,6 +42,8 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "examples/reminders/daily-reminders.jsonl" in STRICT_FILES
     assert "examples/intelligence/README.md" in STRICT_FILES
     assert "examples/intelligence/daily-intelligence.jsonl" in STRICT_FILES
+    assert "examples/reports/README.md" in STRICT_FILES
+    assert "examples/reports/report-fixtures.jsonl" in STRICT_FILES
     assert "examples/reports/daily-intelligence-with-sourceUrls.json" in STRICT_FILES
     assert "examples/job-links/boss-zhipin.txt" in STRICT_FILES
     assert "examples/job-links/boss-zhipin.jsonl" in STRICT_FILES
@@ -116,4 +118,9 @@ def test_strict_publish_rejects_placeholder_publish_files(tmp_path) -> None:
     assert (
         "structured daily-intelligence fixture metadata"
         in checks["content:examples/intelligence/daily-intelligence.jsonl"].detail
+    )
+    assert not checks["content:examples/reports/report-fixtures.jsonl"].ok
+    assert (
+        "structured report fixture metadata"
+        in checks["content:examples/reports/report-fixtures.jsonl"].detail
     )
