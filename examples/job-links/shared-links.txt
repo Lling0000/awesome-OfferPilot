@@ -1,0 +1,17 @@
+# OfferPilot sample shared job-link inputs
+#
+# These links are deterministic fixtures for parser and workflow examples.
+# They are fictional and do not describe real jobs.
+
+https://www.linkedin.example.test/jobs/view/backend-platform-intern-123
+https://m.example-jobs.test/r/job-share?target=product-operations-intern
+
+# Expected behavior:
+# 1. Parse company, role, city, platform, source_type, JD text, and skills.
+# 2. Treat the parsed shared link as lead context with public_evidence=false, not public evidence.
+# 3. Run forced search before generating a completed report.
+# 4. Return a report with external top-level sourceUrls.
+
+# Covered shapes:
+# - LinkedIn-style public job URL.
+# - mobile/shared redirect link.

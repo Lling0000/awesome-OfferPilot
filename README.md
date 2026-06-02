@@ -130,7 +130,7 @@ Interview intake now has the same mock-first shape: upload a recording or paste 
 
 OfferPilot is designed to move from the current deterministic mock agent into small, replaceable provider adapters. The intended provider boundary is:
 
-- `JobLinkParser`: turns job-board links, company career pages, and pasted JDs into structured opportunity fields.
+- `JobLinkParser`: turns Boss Zhipin-style links, company career pages, mirrored pages, mobile/shared redirects, LinkedIn-style public URLs, and pasted JDs into structured opportunity fields.
 - `QueryPlanner`: turns a parsed opportunity into focused, privacy-aware search queries.
 - `SearchProvider`: executes planned queries and returns raw source candidates with retrieval metadata.
 - `SearchSource`: a smaller plugin unit inside a search provider. Sources can represent local fixtures, search engines, forums, social platforms, official company pages, or future paid APIs.
@@ -194,8 +194,8 @@ The public roadmap lives in [docs/roadmap.md](docs/roadmap.md). It keeps the nea
 Current baseline:
 
 - Deterministic local adapters for parser, pasted JD intake, search, transcription, and analysis flows.
-- Job intake handles Boss-style URLs and pasted JD text through the same source-backed report path.
-- Company career-page and mirrored job-board fixtures exercise non-Boss job-link parsing.
+- Job intake handles Boss-style URLs, company career pages, mirrored job-board pages, mobile/shared redirects, LinkedIn-style public URLs, and pasted JD text through the same source-backed report path.
+- Shared job-link parser fixtures exercise Boss, company-careers, mirrored job-board, mobile/shared redirect, and LinkedIn-style public URL shapes.
 - Pasted JD fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - A runnable fixture-backed `SearchSource` plugin example with multiple deterministic candidates.
 - A fail-closed `ExternalSearchAPISource` skeleton for provider work that needs credentials and an endpoint.
@@ -210,7 +210,7 @@ Current baseline:
 
 Next contributor-friendly slices:
 
-- [#11 Add shared job-link parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/11)
+- [#12 Add structured job-link fixture metadata](https://github.com/Lling0000/awesome-OfferPilot/issues/12)
 
 ## 中文说明
 

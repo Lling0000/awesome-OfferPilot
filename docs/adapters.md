@@ -8,7 +8,7 @@ The guiding rule is simple: adapters collect and structure facts; they do not pr
 
 | Adapter | Current default | Production direction | Contract boundary |
 | --- | --- | --- | --- |
-| `JobLinkParser` | `MockJobLinkParser` | Boss Zhipin-style links, company career pages, mirrored job-board links, LinkedIn-style links, pasted JD text | Parse user input into company, role, location, JD text, skills, canonical URL, and confidence. |
+| `JobLinkParser` | `MockJobLinkParser` | Boss Zhipin-style links, company career pages, mirrored job-board links, mobile/shared redirect links, LinkedIn-style public links, pasted JD text | Parse user input into company, role, location, JD text, skills, canonical URL, and confidence. |
 | `SearchProvider` | `MockSearchProvider` | Search API orchestration, site-specific search, forum/social retrieval | Execute the query plan and return raw source candidates plus retrieval coverage. |
 | `SearchSource` | `LocalFixtureSearchSource` | Official-site crawler, forum adapter, social-search adapter, commercial SERP API adapter | Return raw candidates for one query-plan item. |
 | `TranscriptionProvider` | `MockTranscriptionProvider` | Local or hosted speech-to-text | Turn voice notes or interview recordings into reviewable transcript text. |
@@ -22,12 +22,12 @@ Start from the thing you know how to retrieve or structure:
 
 | I want to... | Start with | First useful contribution |
 | --- | --- | --- |
-| Parse hiring-platform links | `JobLinkParser` | Convert a shared job URL or pasted JD into structured opportunity fields without claiming those fields are external evidence. |
+| Parse hiring-platform links | `JobLinkParser` | Convert a shared job URL, mobile redirect, public job-board link, or pasted JD into structured opportunity fields without claiming those fields are external evidence. |
 | Add a searchable source | `SearchSource` | Return raw linked candidates for one query-plan item, then let the normalizer score and dedupe them. |
 | Add voice or transcription | `TranscriptionProvider` | Convert a local voice note or interview recording into transcript text with confidence and quality notes. |
 | Improve report writing | `InterviewAnalyzer` | Produce summaries and next actions that cite existing evidence IDs and top-level `sourceUrls`. |
 
-Hiring-platform parsing is valuable, but parsing is not evidence. A Boss Zhipin-style parser, company-careers parser, or mirrored-job-board parser can extract role title, company, location, JD text, visible salary range, and canonical URL when allowed, but interview claims, company facts, and hiring-manager details still need forced search and source URLs.
+Hiring-platform parsing is valuable, but parsing is not evidence. A Boss Zhipin-style parser, company-careers parser, mirrored-job-board parser, shared/mobile redirect parser, or LinkedIn-style public parser can extract role title, company, location, JD text, visible salary range, and canonical URL when allowed, but interview claims, company facts, and hiring-manager details still need forced search and source URLs. Deterministic parser fixtures should keep `public_evidence=false`.
 
 Voice and transcription adapters should treat transcripts as private user context. A transcript can help generate prep notes, but it is not public evidence and should not be packaged as a `sourceUrls` citation.
 
@@ -180,6 +180,16 @@ python examples/transcription-provider-plugin/run_example.py
 
 The example intentionally avoids real audio files, API keys, and network calls. It proves the `ExternalTranscriptionProvider(transport=...)` replacement path and shows that normalized transcripts stay `private_user_context` with `sourceUrls: []`. For a real provider, replace `fixture_transcription_transport` with a provider SDK or HTTP request, then pass credentials through `TRANSCRIPTION_PROVIDER_API_KEY` and `TRANSCRIPTION_PROVIDER_ENDPOINT`.
 
+## JobLinkParser Fixture Contract
+
+Each parser fixture should define the input URL, `platform`, `source_type`, `company_name`, `job_title`, optional `city`, JD text, extracted skills, and `public_evidence=false`.
+
+Use fictional `.test` domains or clearly non-sensitive public-style examples. Do not commit real private job leads, cookies, screenshots, recruiter messages, or tokens.
+
+Shared/mobile redirect fixtures should prove canonicalization only when it is deterministic. Otherwise preserve the raw URL and keep the parsed job post as lead context.
+
+Parsed job posts are not completed-report evidence. They must never satisfy report `sourceUrls`; the intake flow still has to run forced search and attach external public links.
+
 ## Adapter Implementation Checklist
 
 - Keep public search queries separate from private resume, transcript, phone, email, and interview-note content unless the user explicitly approves sharing it.
@@ -196,7 +206,7 @@ The example intentionally avoids real audio files, API keys, and network calls. 
 
 Good first adapter contributions are small and inspectable:
 
-- Additional job-link parser fixtures for official careers pages, mirrored job-board pages, and platform-specific shared links.
+- More provider-specific parser fixtures with structured expected metadata for each input shape.
 - A Boss Zhipin-style parser that extracts stable public fields from shared links when available.
 - A `SearchSource` wrapper around a real search API that returns title, URL, snippet, publisher, date, and query IDs.
 - A forum or community source that can retrieve interview-report links while respecting platform terms.

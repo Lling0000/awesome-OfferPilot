@@ -94,6 +94,35 @@ def test_run_company_career_link_intake_creates_source_backed_flow(tmp_path) -> 
     assert all(url.startswith("https://") for url in report.source_urls_json)
 
 
+def test_run_shared_job_link_intake_creates_source_backed_flow(tmp_path) -> None:
+    db_url = f"sqlite:///{tmp_path}/offerpilot.db"
+    reset_db(db_url)
+    shared_url = "https://m.example-jobs.test/r/job-share?target=product-operations-intern"
+
+    with session_scope(db_url) as session:
+        user = ensure_demo_user(session)
+        result = run_job_link_intake(session, user, shared_url)
+
+    with session_scope(db_url) as session:
+        app_record = session.get(Application, result["application_id"])
+        job_source = session.get(JobLink, result["job_link_id"])
+        report = session.get(SearchReport, result["search_report_id"])
+
+    assert app_record.company_name == "Example Health"
+    assert app_record.job_title == "Product Operations Intern"
+    assert app_record.city == "Beijing"
+    assert app_record.channel == "mobile_job_share"
+    assert job_source.raw_url == shared_url
+    assert job_source.parsed_payload["source_type"] == "shared_redirect"
+    assert job_source.parsed_payload["public_evidence"] is False
+    assert {"Product Analytics", "A/B Testing", "Roadmap", "SQL"}.issubset(
+        set(job_source.parsed_payload["skills"])
+    )
+    assert report.source_urls_json
+    assert shared_url not in report.source_urls_json
+    assert all(url.startswith("https://") for url in report.source_urls_json)
+
+
 def test_run_job_link_intake_can_use_explicit_resume(tmp_path) -> None:
     db_url = f"sqlite:///{tmp_path}/offerpilot.db"
     reset_db(db_url)
@@ -242,6 +271,44 @@ def test_job_link_parser_fixtures_cover_company_careers_and_mirrors() -> None:
             "Data Analytics Intern",
             "Shenzhen",
             {"Python", "SQL", "Pandas", "Airflow", "Tableau"},
+        ),
+    ]
+
+    for url, platform, source_type, company, role, city, expected_skills in cases:
+        parsed = parser.parse(url)
+        assert parsed["platform"] == platform
+        assert parsed["source_type"] == source_type
+        assert parsed["company_name"] == company
+        assert parsed["job_title"] == role
+        assert parsed["city"] == city
+        assert expected_skills.issubset(set(parsed["skills"]))
+        assert parsed["public_evidence"] is False
+
+
+def test_job_link_parser_fixtures_cover_shared_links() -> None:
+    parser = MockProviderBundle().job_link_parser
+    fixture_text = (JOB_LINK_FIXTURE_DIR / "shared-links.txt").read_text(encoding="utf-8")
+    assert "linkedin.example.test" in fixture_text
+    assert "m.example-jobs.test" in fixture_text
+
+    cases = [
+        (
+            "https://www.linkedin.example.test/jobs/view/backend-platform-intern-123",
+            "linkedin_public",
+            "shared_job_link",
+            "Example Cloud",
+            "Backend Platform Intern",
+            "Singapore",
+            {"Python", "Go", "Kubernetes", "SQL"},
+        ),
+        (
+            "https://m.example-jobs.test/r/job-share?target=product-operations-intern",
+            "mobile_job_share",
+            "shared_redirect",
+            "Example Health",
+            "Product Operations Intern",
+            "Beijing",
+            {"Product Analytics", "A/B Testing", "Roadmap", "SQL"},
         ),
     ]
 

@@ -60,6 +60,7 @@ STRICT_FILES = [
     "examples/interview-notes/audio-upload-metadata.json",
     "examples/job-links/boss-zhipin.txt",
     "examples/job-links/company-careers.txt",
+    "examples/job-links/shared-links.txt",
     "examples/job-descriptions/backend-platform-jd.txt",
     "examples/job-descriptions/frontend-growth-jd.txt",
     "examples/job-descriptions/data-analytics-jd.txt",
@@ -270,6 +271,48 @@ STRICT_CONTENT_REQUIREMENTS = {
                 "ExternalTranscriptionProvider",
                 "TRANSCRIPTION_PROVIDER_API_KEY",
                 "TRANSCRIPTION_PROVIDER_ENDPOINT",
+            ),
+        ),
+        ContentRequirement(
+            "job-link parser fixture contract",
+            (
+                "JobLinkParser Fixture Contract",
+                "public_evidence=false",
+                "mobile/shared redirect",
+                "LinkedIn-style public",
+                "sourceUrls",
+            ),
+        ),
+    ],
+    "examples/job-links/boss-zhipin.txt": [
+        ContentRequirement(
+            "Boss-style lead context markers",
+            (
+                "zhipin.com/job_detail",
+                "public_evidence=false",
+                "sourceUrls",
+            ),
+        ),
+    ],
+    "examples/job-links/company-careers.txt": [
+        ContentRequirement(
+            "company and mirror lead context markers",
+            (
+                "careers.example-retail.test",
+                "jobs.example-mirror.test",
+                "public_evidence=false",
+                "sourceUrls",
+            ),
+        ),
+    ],
+    "examples/job-links/shared-links.txt": [
+        ContentRequirement(
+            "shared-link lead context markers",
+            (
+                "mobile/shared redirect",
+                "LinkedIn-style public",
+                "public_evidence=false",
+                "sourceUrls",
             ),
         ),
     ],

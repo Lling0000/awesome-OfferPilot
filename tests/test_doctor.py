@@ -38,6 +38,9 @@ def test_strict_publish_checks_adapter_docs_and_examples() -> None:
     assert "examples/interview-notes/technical-round.md" in STRICT_FILES
     assert "examples/interview-notes/audio-upload-metadata.json" in STRICT_FILES
     assert "examples/reports/daily-intelligence-with-sourceUrls.json" in STRICT_FILES
+    assert "examples/job-links/boss-zhipin.txt" in STRICT_FILES
+    assert "examples/job-links/company-careers.txt" in STRICT_FILES
+    assert "examples/job-links/shared-links.txt" in STRICT_FILES
     assert "examples/job-descriptions/backend-platform-jd.txt" in STRICT_FILES
     assert "examples/job-descriptions/frontend-growth-jd.txt" in STRICT_FILES
     assert "examples/job-descriptions/data-analytics-jd.txt" in STRICT_FILES

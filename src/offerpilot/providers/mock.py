@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Iterable
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from offerpilot.providers.search_sources import LocalFixtureSearchSource, SearchSource
 from offerpilot.search import build_query_plan, extract_skill_terms, normalize_evidence_items
@@ -150,6 +150,7 @@ def _job_link_fixture(url: str) -> dict:
     parsed_url = urlparse(url.strip())
     host = parsed_url.netloc.lower()
     path = parsed_url.path.lower().rstrip("/")
+    query = parse_qs(parsed_url.query)
 
     if host == "careers.example-retail.test" and path == "/jobs/frontend-growth-intern":
         return _parsed_job_link_fixture(
@@ -176,6 +177,38 @@ def _job_link_fixture(url: str) -> dict:
                 "Mirrored job-board listing for a data analytics intern. Analyze SQL "
                 "datasets with Python and Pandas, maintain Airflow reporting tasks, "
                 "and prepare Tableau dashboards for hiring operations."
+            ),
+        )
+
+    if host == "www.linkedin.example.test" and path == "/jobs/view/backend-platform-intern-123":
+        return _parsed_job_link_fixture(
+            platform="linkedin_public",
+            source_type="shared_job_link",
+            company_name="Example Cloud",
+            job_title="Backend Platform Intern",
+            city="Singapore",
+            jd_text=(
+                "LinkedIn-style public job share for a backend platform intern. Build "
+                "Python and Go services, maintain SQL data paths, and support "
+                "Kubernetes deployment workflows for internal developer tools."
+            ),
+        )
+
+    if (
+        host == "m.example-jobs.test"
+        and path == "/r/job-share"
+        and query.get("target") == ["product-operations-intern"]
+    ):
+        return _parsed_job_link_fixture(
+            platform="mobile_job_share",
+            source_type="shared_redirect",
+            company_name="Example Health",
+            job_title="Product Operations Intern",
+            city="Beijing",
+            jd_text=(
+                "Mobile shared redirect for a product operations intern. Build Product "
+                "Analytics dashboards, write SQL follow-up analysis, coordinate "
+                "A/B Testing reviews, and maintain Roadmap launch notes."
             ),
         )
 

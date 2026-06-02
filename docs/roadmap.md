@@ -10,8 +10,8 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 - The external search API skeleton fails closed until credentials, endpoint, and transport are configured.
 - The external transcription provider skeleton fails closed until credentials, endpoint, and transport are configured.
 - The transcription transport plugin example runs without real audio, API keys, or network access.
-- Job intake handles URLs and pasted JD text through the same source-backed report path.
-- Company career-page and mirrored job-board fixtures exercise non-Boss job-link parsing.
+- Job intake handles URLs, shared links, and pasted JD text through the same source-backed report path.
+- Shared job-link parser fixtures exercise Boss, company-careers, mirrored job-board, mobile/shared redirect, and LinkedIn-style public URL shapes.
 - Pasted JD text is private user context and must not be counted as public evidence.
 - Pasted JD parser fixtures cover backend, frontend, data, and product-style roles, including mixed Chinese/English fields.
 - Evidence normalization and scoring live in `src/offerpilot/search.py`.
@@ -29,14 +29,14 @@ OfferPilot's public promise is intentionally narrow: a local-first job-search wo
 
 Current contributor-friendly issues:
 
-- [#11 Add shared job-link parser fixtures](https://github.com/Lling0000/awesome-OfferPilot/issues/11)
+- [#12 Add structured job-link fixture metadata](https://github.com/Lling0000/awesome-OfferPilot/issues/12)
 
 ## Larger Tracks
 
 These are valuable but should be broken into smaller pull requests.
 
 - Real search providers: add source-specific adapters behind `SearchSource`, with query IDs, result metadata, dedupe, freshness scoring, credibility scoring, and clear setup errors.
-- Job-link parsing: support company career pages, Boss Zhipin-style URLs, LinkedIn-style URLs, and pasted JD text without coupling parsing to search.
+- Job-link parsing: replace deterministic fixtures with compliant provider-specific parsers for company career pages, Boss Zhipin-style URLs, LinkedIn-style URLs, shared/mobile redirects, and pasted JD text without coupling parsing to search.
 - Evidence UX: make `/reports/{search_report_id}` easier to scan by separating official sources, community signals, older background sources, and unknowns.
 - Interview artifacts: add provider-backed transcription while keeping audio, transcripts, and notes out of public fixtures.
 - Daily intelligence workers: add allowed, documented sources only; keep social/forum findings marked as needing verification.
